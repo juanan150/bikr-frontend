@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  TouchableHighlight,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -12,6 +13,11 @@ import customAxios from "../../axios";
 
 const LoginForm = ({ navigation }) => {
   const [form, setForm] = useState(null);
+  const [error, setError] = useState(null);
+
+  const goToSignIn = () => {
+    navigation.navigate("SignUp");
+  };
 
   const handleChangeText = (field, text) => {
     setForm({
@@ -42,17 +48,17 @@ const LoginForm = ({ navigation }) => {
       await AsyncStorage.setItem("@jaq/bikr-auth", response.data.token);
 
       navigation.navigate("Home");
-    } catch (error) {
+    } catch (e) {
       console.log(
         "🚀 ~ file: Login.js ~ line 28 ~ handleSubmit ~ error",
-        error
+        e.response.data.error
       );
-      alert(error.message);
+      setError(e.response.data.error);
     }
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text style={styles.text}>Email</Text>
       <TextInput
         autoCapitalize="none"
@@ -67,9 +73,16 @@ const LoginForm = ({ navigation }) => {
         style={styles.input}
         secureTextEntry
       />
+      {error && <Text style={styles.error}>{error}</Text>}
       <TouchableOpacity style={styles.button} onPress={handleSubmit}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
+      <View style={styles.signUpContainer}>
+        <Text style={styles.signUpText}>Don't you have an account?</Text>
+        <TouchableHighlight style={styles.button} onPress={goToSignIn}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableHighlight>
+      </View>
     </View>
   );
 };
@@ -79,6 +92,14 @@ const styles = StyleSheet.create({
     color: "#1c1919",
     fontSize: 30,
     marginBottom: 10,
+  },
+  signUpContainer: {
+    alignItems: "center",
+  },
+  signUpText: {
+    color: "#1c1919",
+    fontSize: 22,
+    marginTop: 10,
   },
   input: {
     borderColor: "#1c1919",
@@ -95,12 +116,18 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     marginTop: 10,
     padding: 10,
+    width: 300,
   },
   buttonText: {
     color: "#1c1919",
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  error: {
+    color: "red",
+    fontSize: 22,
+    marginBottom: 10,
   },
 });
 

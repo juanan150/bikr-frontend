@@ -9,6 +9,8 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import LoginScreen from "./screens/LoginScreen";
 import SearchScreen from "./screens/SearchScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import SignUpScreen from "./screens/SignUpScreen";
+import Logout from "./components/Logout";
 
 const icons = {
   SearchStack: "tools",
@@ -22,7 +24,13 @@ const DetailStack = createNativeStackNavigator();
 function SearchStack({ navigation }) {
   return (
     <DetailStack.Navigator>
-      <DetailStack.Screen name="Services" component={SearchScreen} />
+      <DetailStack.Screen
+        name="Services"
+        options={{
+          headerRight: () => <Logout {...navigation} />,
+        }}
+        component={SearchScreen}
+      />
     </DetailStack.Navigator>
   );
 }
@@ -64,6 +72,12 @@ export default function App() {
         <Stack.Screen
           name="Home"
           component={LandingScreen}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="SignUp"
+          component={SignUpScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
