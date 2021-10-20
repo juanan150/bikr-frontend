@@ -6,11 +6,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome5 } from "@expo/vector-icons";
 
+import AppContext from "./context/AppContext";
 import LoginScreen from "./screens/LoginScreen";
 import SearchScreen from "./screens/SearchScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import SignUpScreen from "./screens/SignUpScreen";
 import Logout from "./components/Logout";
+import useInitialState from "./hooks/useInitialState";
 
 const icons = {
   SearchStack: "tools",
@@ -60,36 +62,30 @@ function LandingScreen() {
 }
 
 export default function App() {
+  const initialState = useInitialState();
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          options={{ headerShown: false }}
-          component={LoginScreen}
-        />
+    <AppContext.Provider value={initialState}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            options={{ headerShown: false }}
+            component={LoginScreen}
+          />
 
-        <Stack.Screen
-          name="Home"
-          component={LandingScreen}
-          options={{ headerShown: false }}
-        />
+          <Stack.Screen
+            name="Home"
+            component={LandingScreen}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="SignUp"
-          component={SignUpScreen}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name="SignUp"
+            component={SignUpScreen}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AppContext.Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

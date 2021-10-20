@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -9,9 +9,11 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import customAxios from "../../axios";
+//import customAxios from "../../axios";
+import AppContext from "../../context/AppContext";
 
 const LoginForm = ({ navigation }) => {
+  const { state, loginUser } = useContext(AppContext);
   const [form, setForm] = useState(null);
   const [error, setError] = useState(null);
 
@@ -40,21 +42,13 @@ const LoginForm = ({ navigation }) => {
     getData();
   }, []);
 
+  useEffect(() => {
+    setError(state.error);
+    !state.error && navigation.navigate("Home");
+  }, [state]);
+
   const handleSubmit = async () => {
-    try {
-      const response = await customAxios.post("/api/users/login", { ...form });
-
-      // save token to local storage
-      await AsyncStorage.setItem("@jaq/bikr-auth", response.data.token);
-
-      navigation.navigate("Home");
-    } catch (e) {
-      console.log(
-        "🚀 ~ file: Login.js ~ line 28 ~ handleSubmit ~ error",
-        e.response.data.error
-      );
-      setError(e.response.data.error);
-    }
+    await loginUser(form);
   };
 
   return (
