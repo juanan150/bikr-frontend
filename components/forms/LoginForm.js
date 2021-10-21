@@ -5,11 +5,9 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  TouchableHighlight,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-//import customAxios from "../../axios";
 import AppContext from "../../context/AppContext";
 
 const LoginForm = ({ navigation }) => {
@@ -17,7 +15,7 @@ const LoginForm = ({ navigation }) => {
   const [form, setForm] = useState(null);
   const [error, setError] = useState(null);
 
-  const goToSignIn = () => {
+  const goToSignUp = () => {
     navigation.navigate("SignUp");
   };
 
@@ -44,7 +42,7 @@ const LoginForm = ({ navigation }) => {
 
   useEffect(() => {
     setError(state.error);
-    !state.error && navigation.navigate("Home");
+    !state.error && state.user && navigation.navigate("Home");
   }, [state]);
 
   const handleSubmit = async () => {
@@ -73,9 +71,9 @@ const LoginForm = ({ navigation }) => {
       </TouchableOpacity>
       <View style={styles.signUpContainer}>
         <Text style={styles.signUpText}>Don't you have an account?</Text>
-        <TouchableHighlight style={styles.button} onPress={goToSignIn}>
+        <TouchableOpacity style={styles.button} onPress={goToSignUp}>
           <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     </View>
   );

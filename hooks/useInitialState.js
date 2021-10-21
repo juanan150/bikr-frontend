@@ -37,9 +37,33 @@ const useInitialState = () => {
     }
   };
 
+  const signUpUser = async payload => {
+    try {
+      const response = await customAxios.post("/api/users/signup", {
+        ...payload,
+      });
+
+      await loginUser({ email: payload.email, password: payload.password });
+    } catch (e) {
+      setState({
+        ...state,
+        error: e.response.data.error,
+      });
+    }
+  };
+
+  const logoutUser = () => {
+    setState({
+      user: null,
+      error: null,
+    });
+  };
+
   return {
     state,
     loginUser,
+    signUpUser,
+    logoutUser,
   };
 };
 
