@@ -7,13 +7,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useIsFocused } from "@react-navigation/native";
 
 import AppContext from "../../context/AppContext";
 
 const LoginForm = ({ navigation }) => {
-  const { state, loginUser } = useContext(AppContext);
+  const { state, loginUser, resetError } = useContext(AppContext);
   const [form, setForm] = useState(null);
   const [error, setError] = useState(null);
+  const isVisible = useIsFocused();
 
   const goToSignUp = () => {
     navigation.navigate("SignUp");
@@ -25,6 +27,10 @@ const LoginForm = ({ navigation }) => {
       [field]: text,
     });
   };
+
+  useEffect(() => {
+    resetError();
+  }, [isVisible]);
 
   useEffect(() => {
     const getData = async () => {
@@ -94,21 +100,23 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   input: {
-    borderColor: "#1c1919",
-    borderWidth: 1,
-    color: "#1c1919",
     height: 40,
     marginBottom: 12,
     padding: 10,
     width: 300,
+    color: "#1c1919",
+    borderColor: "#1c1919",
+    borderWidth: 1,
+    borderRadius: 5,
   },
   button: {
-    backgroundColor: "#f2771a",
-    borderColor: "#1c1919",
-    borderWidth: 3,
     marginTop: 10,
     padding: 10,
     width: 300,
+    backgroundColor: "#f2771a",
+    borderColor: "#1c1919",
+    borderWidth: 3,
+    borderRadius: 10,
   },
   buttonText: {
     color: "#1c1919",

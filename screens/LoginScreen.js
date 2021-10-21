@@ -32,9 +32,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  logoContainer: {
-    flex: 1,
-  },
   formContainer: {
     flex: 2,
   },

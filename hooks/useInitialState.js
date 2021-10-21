@@ -59,11 +59,19 @@ const useInitialState = () => {
     });
   };
 
+  const resetError = () => {
+    setState({
+      ...state,
+      error: null,
+    });
+  };
+
   return {
     state,
     loginUser,
     signUpUser,
     logoutUser,
+    resetError,
   };
 };
 
