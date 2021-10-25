@@ -12,6 +12,8 @@ import ProfileScreen from './screens/ProfileScreen'
 import SignUpScreen from './screens/SignUpScreen'
 import Logout from './components/Logout'
 import useInitialState from './hooks/useInitialState'
+import RepairShopScreen from './screens/RepairShopScreen'
+import PaymentScreen from './screens/PaymentScreen'
 
 const icons = {
   SearchStack: 'tools',
@@ -31,6 +33,20 @@ function SearchStack({ navigation }) {
           headerRight: () => <Logout {...navigation} />,
         }}
         component={SearchScreen}
+      />
+      <DetailStack.Screen
+        name="RepairShopDetail"
+        options={{
+          title: 'Repair Shop',
+        }}
+        component={RepairShopScreen}
+      />
+      <DetailStack.Screen
+        name="Payment"
+        options={{
+          title: 'Payment',
+        }}
+        component={PaymentScreen}
       />
     </DetailStack.Navigator>
   )

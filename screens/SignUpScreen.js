@@ -1,26 +1,21 @@
 import React, { useState, useContext, useEffect } from 'react'
-import {
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { Text, StyleSheet, TextInput, View } from 'react-native'
 import DropDownPicker from 'react-native-dropdown-picker'
 import PropTypes from 'prop-types'
 
 import AppContext from '../context/AppContext'
 import validateReg from '../components/forms/validateReg'
+import SubmitButton from '../components/SubmitButton'
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFEEDD',
     alignItems: 'center',
     justifyContent: 'center',
   },
   formContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFA347',
     marginBottom: 15,
     paddingRight: 20,
     paddingLeft: 20,
@@ -40,7 +35,7 @@ const styles = StyleSheet.create({
   text: {
     color: '#1c1919',
     fontSize: 24,
-    marginBottom: 5,
+    marginTop: 5,
   },
   signUpContainer: {
     alignItems: 'center',
@@ -56,9 +51,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     padding: 10,
     width: 300,
-    borderColor: '#1c1919',
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderRadius: 5,
+    fontSize: 18,
   },
   list: {
     color: '#1c1919',
@@ -67,19 +62,13 @@ const styles = StyleSheet.create({
     padding: 10,
     width: 300,
     borderRadius: 5,
+    backgroundColor: '#FFA347',
   },
   listBox: {
     color: '#1c1919',
     width: 300,
-  },
-  button: {
-    marginTop: 10,
-    padding: 10,
-    width: 300,
-    backgroundColor: '#f2771a',
-    borderColor: '#1c1919',
-    borderWidth: 3,
-    borderRadius: 10,
+    fontSize: 18,
+    backgroundColor: '#FFA347',
   },
   buttonText: {
     color: '#1c1919',
@@ -149,6 +138,7 @@ const SignUpScreen = ({ navigation }) => {
           style={styles.input}
           onChangeText={(text) => handleChangeText('email', text)}
           keyboardType="email-address"
+          placeholder="Enter email"
         />
         <Text style={styles.text}>Password</Text>
         {errMsg.password && <Text style={styles.error}>{errMsg.password}</Text>}
@@ -157,6 +147,7 @@ const SignUpScreen = ({ navigation }) => {
           onChangeText={(text) => handleChangeText('password', text)}
           style={styles.input}
           secureTextEntry
+          placeholder="Enter password"
         />
         <Text style={styles.text}>Confirm Password</Text>
         {errMsg.confirmedPassword && (
@@ -167,6 +158,7 @@ const SignUpScreen = ({ navigation }) => {
           onChangeText={(text) => handleChangeText('confirmedPassword', text)}
           style={styles.input}
           secureTextEntry
+          placeholder="Enter password"
         />
         <Text style={styles.text}>Full Name</Text>
         {errMsg.name && <Text style={styles.error}>{errMsg.name}</Text>}
@@ -174,7 +166,7 @@ const SignUpScreen = ({ navigation }) => {
           autoCapitalize="none"
           style={styles.input}
           onChangeText={(text) => handleChangeText('name', text)}
-          keyboardType="email-address"
+          placeholder="Enter full name"
         />
         <Text style={styles.text}>Role</Text>
         {errMsg.role && <Text style={styles.error}>{errMsg.role}</Text>}
@@ -187,13 +179,14 @@ const SignUpScreen = ({ navigation }) => {
           setItems={setItems}
           placeholder="Select a role"
           style={styles.list}
+          placeholderStyle={{ fontSize: 18 }}
           dropDownContainerStyle={styles.listBox}
         />
       </View>
       {error && <Text style={styles.error}>{error}</Text>}
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+      <SubmitButton handleSubmit={handleSubmit}>
         <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
+      </SubmitButton>
     </View>
   )
 }

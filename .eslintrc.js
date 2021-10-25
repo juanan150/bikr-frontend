@@ -30,6 +30,17 @@ module.exports = {
       'error',
       { allowShortCircuit: true, allowTernary: true },
     ],
-    'operator-linebreak': ['error', 'after'],
+    'operator-linebreak': [
+      'error',
+      'after',
+      { overrides: { '?': 'ignore', ':': 'ignore' } },
+    ],
+    'object-curly-newline': [
+      'error',
+      {
+        ImportDeclaration: { multiline: true, minProperties: 6 },
+        ExportDeclaration: { multiline: true, minProperties: 5 },
+      },
+    ],
   },
 }

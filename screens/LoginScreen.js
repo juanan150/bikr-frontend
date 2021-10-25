@@ -9,7 +9,7 @@ import logo from '../assets/bikr-logo.png'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFEEDD',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
     height: 300,
     width: 300,
     resizeMode: 'contain',
-    // borderRadius: 100,
   },
 })
 

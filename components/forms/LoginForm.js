@@ -1,16 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
-import {
-  View,
-  Text,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native'
+import { View, Text, StyleSheet, TextInput } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useIsFocused } from '@react-navigation/native'
 import PropTypes from 'prop-types'
 
 import AppContext from '../../context/AppContext'
+import SubmitButton from '../SubmitButton'
 
 const styles = StyleSheet.create({
   text: {
@@ -33,16 +28,14 @@ const styles = StyleSheet.create({
     width: 300,
     color: '#1c1919',
     borderColor: '#1c1919',
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderRadius: 5,
+    fontSize: 18,
   },
   button: {
     marginTop: 10,
     padding: 10,
     width: 300,
-    backgroundColor: '#f2771a',
-    borderColor: '#1c1919',
-    borderWidth: 3,
     borderRadius: 10,
   },
   buttonText: {
@@ -103,13 +96,14 @@ const LoginForm = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View>
       <Text style={styles.text}>Email</Text>
       <TextInput
         autoCapitalize="none"
         style={styles.input}
         onChangeText={(text) => handleChangeText('email', text)}
         keyboardType="email-address"
+        placeholder="Enter email"
       />
       <Text style={styles.text}>Password</Text>
       <TextInput
@@ -117,16 +111,17 @@ const LoginForm = ({ navigation }) => {
         onChangeText={(text) => handleChangeText('password', text)}
         style={styles.input}
         secureTextEntry
+        placeholder="Enter password"
       />
       {error && <Text style={styles.error}>{error}</Text>}
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+      <SubmitButton handleSubmit={handleSubmit}>
+        <Text style={styles.buttonText}>Sign In</Text>
+      </SubmitButton>
       <View style={styles.signUpContainer}>
         <Text style={styles.signUpText}>Don&apos;t you have an account?</Text>
-        <TouchableOpacity style={styles.button} onPress={goToSignUp}>
+        <SubmitButton handleSubmit={goToSignUp}>
           <Text style={styles.buttonText}>Sign Up</Text>
-        </TouchableOpacity>
+        </SubmitButton>
       </View>
     </View>
   )

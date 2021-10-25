@@ -6,6 +6,11 @@ import customAxios from '../axios'
 const initialState = {
   user: null,
   error: null,
+  repairShopsInfo: {
+    count: 0,
+    page: 0,
+    repairShops: [],
+  },
 }
 
 const useInitialState = () => {
@@ -59,11 +64,37 @@ const useInitialState = () => {
     })
   }
 
+  // const searchService = () => {}
+
+  const listRepairShops = async (page) => {
+    try {
+      const response = await customAxios.get(`/api/repairshops/?page=${page}`)
+      if (page === 1) {
+        setState({
+          ...state,
+          repairShopsInfo: response.data,
+        })
+      } else {
+        setState({
+          ...state,
+          repairShopsInfo: {
+            ...response.data,
+            repairShops: state?.repairShopsInfo?.repairShops.concat(
+              response.data.repairShops,
+            ),
+          },
+        })
+      }
+    } catch (e) {
+      setState({
+        ...state,
+        error: e.response.data.error,
+      })
+    }
+  }
+
   const resetError = () => {
-    setState({
-      ...state,
-      error: null,
-    })
+    setState(initialState)
   }
 
   return {
@@ -72,6 +103,7 @@ const useInitialState = () => {
     signUpUser,
     logoutUser,
     resetError,
+    listRepairShops,
   }
 }
 
