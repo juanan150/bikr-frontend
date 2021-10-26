@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
 })
 
 const LoginForm = ({ navigation }) => {
-  const { state, loginUser, resetError } = useContext(AppContext)
+  const { state, loginUser, loadUser, resetError } = useContext(AppContext)
   const [form, setForm] = useState(null)
   const [error, setError] = useState(null)
   const isVisible = useIsFocused()
@@ -73,11 +73,18 @@ const LoginForm = ({ navigation }) => {
   }, [isVisible])
 
   useEffect(() => {
+    setError(state.error)
+    if (!state.error && state.user) {
+      navigation.navigate('Home')
+    }
+  }, [state])
+
+  useEffect(() => {
     const getData = async () => {
       try {
         const value = await AsyncStorage.getItem('@jaq/bikr-auth')
         if (value) {
-          navigation.navigate('Home')
+          loadUser()
         }
       } catch (e) {
         // error reading value

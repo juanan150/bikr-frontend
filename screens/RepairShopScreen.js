@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable implicit-arrow-linebreak */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import {
   View,
   Text,
@@ -15,8 +15,10 @@ import MapView, { Marker } from 'react-native-maps'
 import { RadioButton } from 'react-native-paper'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { FontAwesome } from '@expo/vector-icons'
+import { useIsFocused } from '@react-navigation/native'
 
 import SubmitButton from '../components/SubmitButton'
+import AppContext from '../context/AppContext'
 
 const styles = StyleSheet.create({
   screen: {
@@ -85,15 +87,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  error: {
+    color: 'red',
+    fontSize: 22,
+    marginBottom: 10,
+  },
 })
 
 const RepairShopScreen = ({ route, navigation }) => {
+  const { state, resetError, requestService } = useContext(AppContext)
   const { repairShop } = route?.params
   const [serviceReq, setServiceReq] = useState({
     scheduledDate: new Date(),
+    done: false,
+    repairShopId: repairShop._id,
   })
+  const [error, setError] = useState(false)
   const [show, setShow] = useState(false)
   const [dateString, setDateString] = useState()
+  const isVisible = useIsFocused()
 
   useEffect(() => {
     setDateString(
@@ -102,6 +114,19 @@ const RepairShopScreen = ({ route, navigation }) => {
       }-${serviceReq.scheduledDate.getDate()}`,
     )
   }, [serviceReq.scheduledDate])
+
+  useEffect(() => {
+    setError(state.error)
+    !state.error &&
+      state.user &&
+      serviceReq.done &&
+      navigation.navigate('Payment')
+  }, [state])
+
+  useEffect(() => {
+    resetError()
+    setServiceReq({ ...serviceReq, done: false })
+  }, [isVisible])
 
   const showDatepicker = () => {
     setShow(true)
@@ -116,84 +141,98 @@ const RepairShopScreen = ({ route, navigation }) => {
     }))
   }
 
-  const goToPay = () => {
-    navigation.navigate('Payment')
+  const handleSubmit = () => {
+    if (!serviceReq.scheduledDate || !serviceReq.serviceName) {
+      setError('* All fields are required')
+    } else {
+      setServiceReq({ ...serviceReq, done: true })
+      requestService(serviceReq)
+    }
   }
 
   return (
     <SafeAreaView style={styles.screen}>
-      <ScrollView contentContainerStyle={styles.scrollView}>
-        <Text style={styles.title}>{repairShop.name}</Text>
-        <Text style={styles.text}>{repairShop.address}</Text>
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: repairShop.latitude,
-            longitude: repairShop.longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-          }}
-        >
-          <Marker
-            key="1"
-            coordinate={{
+      {repairShop.services.length > 0 ? (
+        <ScrollView contentContainerStyle={styles.scrollView}>
+          <Text style={styles.title}>{repairShop.name}</Text>
+          <Text style={styles.text}>{repairShop.address}</Text>
+          <MapView
+            style={styles.map}
+            initialRegion={{
               latitude: repairShop.latitude,
               longitude: repairShop.longitude,
+              latitudeDelta: 0.01,
+              longitudeDelta: 0.01,
             }}
-          />
-        </MapView>
-        <Text style={styles.serviceTitle}>Select your Service</Text>
-        <View style={styles.serviceContainer}>
-          {repairShop.services.map((service) => (
-            <View style={styles.list} key={service.name}>
-              <Text style={styles.listText}>{service.serviceName}</Text>
-              <RadioButton
-                value={service.serviceName}
-                status={
-                  serviceReq.serviceName === service.serviceName
-                    ? 'checked'
-                    : 'unchecked'
-                }
-                onPress={() =>
-                  setServiceReq({
-                    ...serviceReq,
-                    serviceName: service.serviceName,
-                  })
-                }
-                color="#FFA347"
-              />
-            </View>
-          ))}
-        </View>
-        <Text style={styles.serviceTitle}>Schedule your Service</Text>
-        <View style={styles.dateContainer}>
-          <FontAwesome
-            name="calendar"
-            size={24}
-            color="#1c1919"
-            onPress={showDatepicker}
-          />
-          <TextInput
-            editable={false}
-            style={styles.input}
-            value={dateString}
-            onPress={showDatepicker}
-          />
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={serviceReq.scheduledDate}
-              mode="date"
-              is24Hour
-              display="default"
-              onChange={handleDateChange}
+          >
+            <Marker
+              key="1"
+              coordinate={{
+                latitude: repairShop.latitude,
+                longitude: repairShop.longitude,
+              }}
             />
-          )}
-        </View>
-        <SubmitButton handleSubmit={goToPay}>
-          <Text style={styles.buttonText}>Schedule</Text>
-        </SubmitButton>
-      </ScrollView>
+          </MapView>
+          <Text style={styles.serviceTitle}>Select your Service</Text>
+          <View style={styles.serviceContainer}>
+            {repairShop.services.map((service) => (
+              <View
+                style={styles.list}
+                key={service.name + service.price.toString()}
+              >
+                <Text style={styles.listText}>{service.serviceName}</Text>
+                <RadioButton
+                  value={service.serviceName}
+                  status={
+                    serviceReq.serviceName === service.serviceName
+                      ? 'checked'
+                      : 'unchecked'
+                  }
+                  onPress={() =>
+                    setServiceReq({
+                      ...serviceReq,
+                      serviceName: service.serviceName,
+                      servicePrice: service.price,
+                    })
+                  }
+                  color="#FFA347"
+                />
+              </View>
+            ))}
+          </View>
+          <Text style={styles.serviceTitle}>Schedule your Service</Text>
+          <View style={styles.dateContainer}>
+            <FontAwesome
+              name="calendar"
+              size={24}
+              color="#1c1919"
+              onPress={showDatepicker}
+            />
+            <TextInput
+              editable={false}
+              style={styles.input}
+              value={dateString}
+              onPress={showDatepicker}
+            />
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={serviceReq.scheduledDate}
+                mode="date"
+                is24Hour
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
+          </View>
+          {error && <Text style={styles.error}>{error}</Text>}
+          <SubmitButton handleSubmit={handleSubmit}>
+            <Text style={styles.buttonText}>Schedule</Text>
+          </SubmitButton>
+        </ScrollView>
+      ) : (
+        <Text>Loading</Text>
+      )}
     </SafeAreaView>
   )
 }

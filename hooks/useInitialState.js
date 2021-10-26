@@ -11,6 +11,7 @@ const initialState = {
     page: 0,
     repairShops: [],
   },
+  payed: false,
 }
 
 const useInitialState = () => {
@@ -23,6 +24,8 @@ const useInitialState = () => {
       })
       // save token to local storage
       await AsyncStorage.setItem('@jaq/bikr-auth', response.data.token)
+      customAxios.defaults.headers.common.Authorization =
+        await AsyncStorage.getItem('@jaq/bikr-auth')
       setState({
         ...state,
         user: {
@@ -42,6 +45,27 @@ const useInitialState = () => {
     }
   }
 
+  const loadUser = async () => {
+    try {
+      customAxios.defaults.headers.common.Authorization =
+        await AsyncStorage.getItem('@jaq/bikr-auth')
+      const response = await customAxios.get('/api/users/me')
+      setState({
+        ...state,
+        user: {
+          _id: response.data._id,
+          email: response.data.email,
+          name: response.data.name,
+          role: response.data.role,
+          imageUrl: response.data.imageUrl,
+        },
+        error: null,
+      })
+    } catch (e) {
+      // console.log(e)
+    }
+  }
+
   const signUpUser = async (payload) => {
     try {
       await customAxios.post('/api/users/signup', {
@@ -58,10 +82,7 @@ const useInitialState = () => {
   }
 
   const logoutUser = () => {
-    setState({
-      user: null,
-      error: null,
-    })
+    setState(initialState)
   }
 
   // const searchService = () => {}
@@ -93,17 +114,56 @@ const useInitialState = () => {
     }
   }
 
+  const requestService = (payload) => {
+    setState({
+      ...state,
+      serviceInfo: payload,
+    })
+  }
+
+  const generatePayment = async (payload) => {
+    try {
+      const data = {
+        cardNumber: payload.cardNumber,
+        expYear: payload.expYear,
+        expMonth: payload.expMonth,
+        cvc: payload.cvc,
+        value: payload.amount,
+        customerId: state.user._id,
+        service: state.serviceInfo.serviceName,
+        repairShopId: state.serviceInfo.repairShopId,
+      }
+      await customAxios.post('/api/transactions', data)
+      setState({
+        ...state,
+        payed: true,
+      })
+    } catch (e) {
+      setState({
+        ...state,
+        error: e.response.data.error,
+      })
+    }
+  }
+
   const resetError = () => {
-    setState(initialState)
+    setState({
+      ...state,
+      error: null,
+      payed: false,
+    })
   }
 
   return {
     state,
     loginUser,
+    loadUser,
     signUpUser,
     logoutUser,
     resetError,
     listRepairShops,
+    requestService,
+    generatePayment,
   }
 }
 

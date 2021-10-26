@@ -81,7 +81,7 @@ const SearchScreen = ({ navigation }) => {
           numColumns={1}
           onEndReachedThreshold={10}
           onEndReached={() => {
-            listNextRepairShops(repairShops.currentPage + 1)
+            listNextRepairShops(+repairShops.page + 1)
           }}
         />
       )}
