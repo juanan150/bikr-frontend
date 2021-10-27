@@ -176,11 +176,8 @@ const RepairShopScreen = ({ route, navigation }) => {
           <Text style={styles.serviceTitle}>Select your Service</Text>
           <View style={styles.serviceContainer}>
             {repairShop.services.map((service) => (
-              <View
-                style={styles.list}
-                key={service.name + service.price.toString()}
-              >
-                <Text style={styles.listText}>{service.serviceName}</Text>
+              <View style={styles.list} key={service.serviceName}>
+                <Text style={styles.listText}>{service.serviceDetails}</Text>
                 <RadioButton
                   value={service.serviceName}
                   status={

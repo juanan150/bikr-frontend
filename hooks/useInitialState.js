@@ -132,6 +132,7 @@ const useInitialState = () => {
         customerId: state.user._id,
         service: state.serviceInfo.serviceName,
         repairShopId: state.serviceInfo.repairShopId,
+        dues: 1,
       }
       await customAxios.post('/api/transactions', data)
       setState({

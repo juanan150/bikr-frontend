@@ -1,7 +1,10 @@
+/* eslint-disable import/no-duplicates */
 import React, { useState, useContext, useEffect } from 'react'
 import { Text, StyleSheet, TextInput, View } from 'react-native'
 import DropDownPicker from 'react-native-dropdown-picker'
 import PropTypes from 'prop-types'
+import { Feather } from '@expo/vector-icons'
+import { MaterialIcons } from '@expo/vector-icons'
 
 import AppContext from '../context/AppContext'
 import validateReg from '../components/forms/validateReg'
@@ -10,75 +13,72 @@ import SubmitButton from '../components/SubmitButton'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFEEDD',
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  formContainer: {
-    backgroundColor: '#FFA347',
-    marginBottom: 15,
-    paddingRight: 20,
-    paddingLeft: 20,
-    paddingBottom: 20,
-    borderWidth: 2,
-    borderRadius: 20,
-    elevation: 10,
-    shadowColor: '#1c1919',
-  },
+
   title: {
+    marginBottom: 20,
+    alignSelf: 'center',
     color: '#1c1919',
     fontSize: 30,
-    marginBottom: 5,
-    marginTop: 15,
-    alignSelf: 'center',
+    fontWeight: 'bold',
   },
-  text: {
-    color: '#1c1919',
-    fontSize: 24,
-    marginTop: 5,
-  },
-  signUpContainer: {
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  signUpText: {
-    color: '#1c1919',
-    fontSize: 22,
-    marginTop: 10,
+  iconContainer: {
+    height: 60,
+    width: 40,
+    marginBottom: 12,
+    justifyContent: 'center',
+    paddingLeft: 10,
+    backgroundColor: '#EBEBEC',
+    borderBottomLeftRadius: 5,
+    borderTopLeftRadius: 5,
   },
   input: {
-    color: '#1c1919',
-    height: 40,
+    height: 60,
     marginBottom: 12,
-    padding: 10,
+    padding: 20,
+    paddingLeft: 10,
     width: 300,
-    borderBottomWidth: 1,
-    borderRadius: 5,
+    color: '#1c1919',
+    backgroundColor: '#EBEBEC',
+    borderBottomRightRadius: 5,
+    borderTopRightRadius: 5,
     fontSize: 18,
   },
   list: {
-    color: '#1c1919',
-    height: 40,
+    height: 60,
     marginBottom: 12,
-    padding: 10,
-    width: 300,
+    padding: 20,
+    width: 340,
+    color: '#1c1919',
     borderRadius: 5,
-    backgroundColor: '#FFA347',
+    borderWidth: 0,
+    backgroundColor: '#EBEBEC',
   },
   listBox: {
     color: '#1c1919',
-    width: 300,
+    width: 340,
     fontSize: 18,
-    backgroundColor: '#FFA347',
+    backgroundColor: '#EBEBEC',
+    borderWidth: 0,
   },
   buttonText: {
-    color: '#1c1919',
+    color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   error: {
     color: 'red',
-    fontSize: 22,
+    fontSize: 18,
     marginBottom: 10,
   },
 })
@@ -129,46 +129,65 @@ const SignUpScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.formContainer}>
+      <View>
         <Text style={styles.title}>Sign Up</Text>
-        <Text style={styles.text}>Email</Text>
         {errMsg.email && <Text style={styles.error}>{errMsg.email}</Text>}
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
-          onChangeText={(text) => handleChangeText('email', text)}
-          keyboardType="email-address"
-          placeholder="Enter email"
-        />
-        <Text style={styles.text}>Password</Text>
+        <View style={styles.inputContainer}>
+          <View style={styles.iconContainer}>
+            <Feather name="mail" size={24} color="grey" />
+          </View>
+          <TextInput
+            autoCapitalize="none"
+            style={styles.input}
+            onChangeText={(text) => handleChangeText('email', text)}
+            keyboardType="email-address"
+            placeholder="Enter your email"
+          />
+        </View>
         {errMsg.password && <Text style={styles.error}>{errMsg.password}</Text>}
-        <TextInput
-          autoCapitalize="none"
-          onChangeText={(text) => handleChangeText('password', text)}
-          style={styles.input}
-          secureTextEntry
-          placeholder="Enter password"
-        />
-        <Text style={styles.text}>Confirm Password</Text>
+        <View style={styles.inputContainer}>
+          <View style={styles.iconContainer}>
+            <Feather name="lock" size={24} color="grey" />
+          </View>
+          <TextInput
+            autoCapitalize="none"
+            onChangeText={(text) => handleChangeText('password', text)}
+            style={styles.input}
+            secureTextEntry
+            placeholder="Enter your password"
+          />
+        </View>
         {errMsg.confirmedPassword && (
           <Text style={styles.error}>{errMsg.confirmedPassword}</Text>
         )}
-        <TextInput
-          autoCapitalize="none"
-          onChangeText={(text) => handleChangeText('confirmedPassword', text)}
-          style={styles.input}
-          secureTextEntry
-          placeholder="Enter password"
-        />
-        <Text style={styles.text}>Full Name</Text>
+        <View style={styles.inputContainer}>
+          <View style={styles.iconContainer}>
+            <Feather name="lock" size={24} color="grey" />
+          </View>
+          <TextInput
+            autoCapitalize="none"
+            onChangeText={(text) => handleChangeText('confirmedPassword', text)}
+            style={styles.input}
+            secureTextEntry
+            placeholder="Enter your password again"
+          />
+        </View>
         {errMsg.name && <Text style={styles.error}>{errMsg.name}</Text>}
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
-          onChangeText={(text) => handleChangeText('name', text)}
-          placeholder="Enter full name"
-        />
-        <Text style={styles.text}>Role</Text>
+        <View style={styles.inputContainer}>
+          <View style={styles.iconContainer}>
+            <MaterialIcons
+              name="drive-file-rename-outline"
+              size={24}
+              color="grey"
+            />
+          </View>
+          <TextInput
+            autoCapitalize="none"
+            style={styles.input}
+            onChangeText={(text) => handleChangeText('name', text)}
+            placeholder="Enter your full name"
+          />
+        </View>
         {errMsg.role && <Text style={styles.error}>{errMsg.role}</Text>}
         <DropDownPicker
           open={open}
@@ -177,10 +196,11 @@ const SignUpScreen = ({ navigation }) => {
           setOpen={setOpen}
           setValue={handleRoleText}
           setItems={setItems}
-          placeholder="Select a role"
+          placeholder="Select your role"
           style={styles.list}
-          placeholderStyle={{ fontSize: 18 }}
+          placeholderStyle={{ fontSize: 18, paddingLeft: 10, color: 'grey' }}
           dropDownContainerStyle={styles.listBox}
+          zIndex={3000}
         />
       </View>
       {error && <Text style={styles.error}>{error}</Text>}

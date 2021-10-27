@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable no-use-before-define */
 import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, FlatList, StyleSheet } from 'react-native'
@@ -12,22 +13,30 @@ import RepairShopCard from '../components/RepairShopCard'
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFEEDD',
-    alignItems: 'center',
+    backgroundColor: '#fff',
   },
   title: {
-    fontSize: 30,
     marginBottom: 20,
-  },
-  text: {
     color: '#1c1919',
     fontSize: 30,
-    marginBottom: 10,
+    lineHeight: 32,
+    fontWeight: 'bold',
+    marginLeft: 20,
+  },
+  span: {
+    color: '#1c1919',
+    fontSize: 18,
+    marginRight: 5,
+    marginLeft: 20,
   },
   error: {
     color: 'red',
     fontSize: 22,
     marginBottom: 10,
+  },
+  list: {
+    display: 'flex',
+    alignItems: 'center',
   },
 })
 
@@ -65,14 +74,14 @@ const SearchScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <SearchBar title="Services" handleChangeInput={searchServicesDebounced} />
-      <Text style={styles.title}>Repair Shops</Text>
+      <Text style={styles.span}>Hi {state.user.name},</Text>
+      <Text style={styles.title}>Are you looking for a Service?</Text>
       {error ? (
         <View>
           <Text>There is nothing here</Text>
         </View>
       ) : (
         <FlatList
-          style={styles.list}
           data={repairShops.repairShops}
           renderItem={({ item }) => (
             <RepairShopCard {...item} router={navigation} />
@@ -83,6 +92,7 @@ const SearchScreen = ({ navigation }) => {
           onEndReached={() => {
             listNextRepairShops(+repairShops.page + 1)
           }}
+          contentContainerStyle={styles.list}
         />
       )}
     </View>

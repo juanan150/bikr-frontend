@@ -8,38 +8,70 @@ import {
   StyleSheet,
   Image,
   FlatList,
+  _View,
 } from 'react-native'
+import { Feather } from '@expo/vector-icons'
 
 const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
-    height: 170,
-    width: 350,
-    padding: 10,
+    minHeight: 170,
+    width: 370,
     marginVertical: 5,
-    backgroundColor: '#FFA347',
-    borderRadius: 10,
+    backgroundColor: '#F7F7F8',
+    borderRadius: 20,
     elevation: 10,
     shadowColor: '#1c1919',
     marginBottom: 15,
   },
   image: {
-    height: 150,
+    height: 170,
     width: 150,
+    borderRadius: 20,
+  },
+  infoContainer: {
+    paddingLeft: 10,
+    paddingTop: 10,
+    position: 'relative',
   },
   title: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
   },
   address: {
+    color: '#939393',
     fontSize: 16,
+    marginBottom: 10,
   },
   service: {
     fontSize: 16,
     fontWeight: 'bold',
   },
+  listContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 24,
+    width: 180,
+    marginBottom: 5,
+    backgroundColor: '#f2771a',
+    borderRadius: 12,
+  },
   listItem: {
+    fontSize: 14,
+    lineHeight: 14,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  schedule: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 10,
+    right: -20,
+  },
+  scheduleText: {
     fontSize: 16,
+    marginRight: 3,
   },
 })
 
@@ -57,21 +89,24 @@ const RepairShopCard = (props) => {
       <View>
         <Image source={{ uri: imageUrl }} style={styles.image} />
       </View>
-      <View>
+      <View style={styles.infoContainer}>
         <Text style={styles.title}>{name}</Text>
         <Text style={styles.address}>{address}</Text>
 
-        <View>
-          <Text style={styles.service}>Services</Text>
-          <FlatList
-            data={services}
-            renderItem={({ item }) => (
+        <FlatList
+          data={services}
+          renderItem={({ item }) => (
+            <View style={styles.listContainer}>
               <Text style={styles.listItem}>
-                {item.serviceName}: ${item.price}
+                {item.serviceDetails}: ${item.price}
               </Text>
-            )}
-            keyExtractor={(item) => item.serviceName}
-          />
+            </View>
+          )}
+          keyExtractor={(item) => item.serviceName}
+        />
+        <View style={styles.schedule}>
+          <Text style={styles.scheduleText}>Schedule</Text>
+          <Feather name="arrow-right" size={22} color="#f2771a" />
         </View>
       </View>
     </TouchableOpacity>
