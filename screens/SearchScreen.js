@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable no-use-before-define */
 import React, { useContext, useEffect, useState } from 'react'
-import { View, Text, FlatList, StyleSheet } from 'react-native'
+import { View, Text, FlatList, StyleSheet, Image } from 'react-native'
 import PropTypes from 'prop-types'
 import { useIsFocused } from '@react-navigation/native'
 // import debounce from 'lodash/debounce'
@@ -9,11 +9,21 @@ import { useIsFocused } from '@react-navigation/native'
 import SearchBar from '../components/SearchBar'
 import AppContext from '../context/AppContext'
 import RepairShopCard from '../components/RepairShopCard'
+import userImage from '../assets/user-dummy.png'
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  searchBarContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 20,
+    paddingBottom: 10,
   },
   title: {
     marginBottom: 20,
@@ -29,14 +39,20 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginLeft: 20,
   },
+  list: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+  image: {
+    width: 70,
+    height: 70,
+    resizeMode: 'contain',
+    borderRadius: 20,
+  },
   error: {
     color: 'red',
     fontSize: 22,
     marginBottom: 10,
-  },
-  list: {
-    display: 'flex',
-    alignItems: 'center',
   },
 })
 
@@ -73,7 +89,13 @@ const SearchScreen = ({ navigation }) => {
   }
   return (
     <View style={styles.screen}>
-      <SearchBar title="Services" handleChangeInput={searchServicesDebounced} />
+      <View style={styles.searchBarContainer}>
+        <SearchBar
+          title="Services"
+          handleChangeInput={searchServicesDebounced}
+        />
+        <Image source={userImage} style={styles.image} />
+      </View>
       <Text style={styles.span}>Hi {state.user.name},</Text>
       <Text style={styles.title}>Are you looking for a Service?</Text>
       {error ? (

@@ -8,7 +8,6 @@ import {
   StyleSheet,
   Image,
   FlatList,
-  _View,
 } from 'react-native'
 import { Feather } from '@expo/vector-icons'
 

@@ -4,7 +4,7 @@ import { View, StyleSheet, Image, KeyboardAvoidingView } from 'react-native'
 import PropTypes from 'prop-types'
 
 import LoginForm from '../components/forms/LoginForm'
-import logo from '../assets/bikr-logo.png'
+import logo from '../assets/bikr-logo1.png'
 
 const styles = StyleSheet.create({
   container: {

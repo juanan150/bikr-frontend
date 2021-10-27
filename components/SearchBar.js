@@ -5,17 +5,13 @@ import { Feather } from '@expo/vector-icons'
 
 const styles = StyleSheet.create({
   container: {
-    width: 400,
+    width: 240,
     alignItems: 'flex-start',
     justifyContent: 'center',
-    marginBottom: 20,
-    marginTop: 20,
-    marginLeft: 20,
   },
 
   input: {
     height: 50,
-    marginBottom: 12,
     padding: 10,
     paddingLeft: 10,
     width: 200,
@@ -33,7 +29,6 @@ const styles = StyleSheet.create({
   iconContainer: {
     height: 50,
     width: 40,
-    marginBottom: 12,
     justifyContent: 'center',
     paddingLeft: 10,
     backgroundColor: '#EBEBEC',
