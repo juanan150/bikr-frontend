@@ -189,6 +189,8 @@ const SignUpScreen = ({ navigation }) => {
           />
         </View>
         {errMsg.role && <Text style={styles.error}>{errMsg.role}</Text>}
+
+        {error && <Text style={styles.error}>{error}</Text>}
         <DropDownPicker
           open={open}
           value={form?.role}
@@ -198,12 +200,12 @@ const SignUpScreen = ({ navigation }) => {
           setItems={setItems}
           placeholder="Select your role"
           style={styles.list}
-          placeholderStyle={{ fontSize: 18, paddingLeft: 10, color: 's' }}
+          placeholderStyle={{ fontSize: 18, paddingLeft: 10, color: 'grey' }}
           dropDownContainerStyle={styles.listBox}
+          textStyle={{ fontSize: 18, paddingLeft: 10 }}
           zIndex={3000}
         />
       </View>
-      {error && <Text style={styles.error}>{error}</Text>}
       <SubmitButton handleSubmit={handleSubmit}>
         <Text style={styles.buttonText}>Sign Up</Text>
       </SubmitButton>

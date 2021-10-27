@@ -122,6 +122,7 @@ const RepairShopScreen = ({ route, navigation }) => {
     scheduledDate: new Date(),
     done: false,
     repairShopId: repairShop._id,
+    repairShopName: repairShop.name,
   })
   const [error, setError] = useState(false)
   const [show, setShow] = useState(false)

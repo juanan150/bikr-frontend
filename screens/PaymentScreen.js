@@ -18,10 +18,24 @@ const styles = StyleSheet.create({
 
   title: {
     marginBottom: 20,
-    alignSelf: 'center',
     color: '#1c1919',
     fontSize: 30,
     fontWeight: 'bold',
+  },
+  money: {
+    marginBottom: 20,
+    color: '#fff',
+    backgroundColor: '#f2771a',
+    padding: 5,
+    fontSize: 30,
+    borderRadius: 10,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   inputContainer: {
     display: 'flex',
@@ -60,11 +74,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 0,
     backgroundColor: '#EBEBEC',
+    marginLeft: 5,
   },
   listBox: {
     color: '#1c1919',
     width: 340,
-    fontSize: 18,
     backgroundColor: '#EBEBEC',
     borderWidth: 0,
   },
@@ -151,7 +165,7 @@ const PaymentScreen = ({ navigation }) => {
     } else {
       Alert.alert(
         'Payment confirmation',
-        `Are you sure you want to pay $${state.serviceInfo.servicePrice} at `,
+        `Are you sure you want to pay $${state.serviceInfo.servicePrice} for ${state.serviceInfo.serviceDetails} to ${state.serviceInfo.repairShopName} `,
         [
           {
             text: 'Cancel',
@@ -170,67 +184,68 @@ const PaymentScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.title}>
-          Payment for {state.serviceInfo.serviceDetails}
-        </Text>
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Feather name="credit-card" size={24} color="grey" />
-            </View>
-            <TextInput
-              autoCapitalize="none"
-              style={styles.input}
-              onChangeText={(text) => handleChangeText('cardNumber', text)}
-              placeholder="Enter your credit card number"
-              keyboardType="number-pad"
-            />
-          </View>
-          <DropDownPicker
-            open={openM}
-            value={form?.expMonth}
-            items={month}
-            setOpen={setOpenM}
-            setValue={handleMonthText}
-            setItems={setMonth}
-            placeholder="Select the expiration month"
-            style={styles.list}
-            placeholderStyle={{ fontSize: 18 }}
-            dropDownContainerStyle={styles.listBox}
-            zIndex={2000}
-            zIndexInverse={2000}
-          />
-          <DropDownPicker
-            open={openY}
-            value={form?.expYear}
-            items={year}
-            setOpen={setOpenY}
-            setValue={handleYearText}
-            setItems={setYear}
-            placeholder="Select the expiration year"
-            style={styles.list}
-            placeholderStyle={{ fontSize: 18 }}
-            dropDownContainerStyle={styles.listBox}
-            zIndex={1000}
-            zIndexInverse={3000}
-          />
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Feather name="credit-card" size={24} color="grey" />
-            </View>
-            <TextInput
-              autoCapitalize="none"
-              style={styles.input}
-              onChangeText={(text) => handleChangeText('cvc', text)}
-              placeholder="Enter your credit card cvc"
-              keyboardType="number-pad"
-            />
-          </View>
-          {error && <Text style={styles.error}>{error}</Text>}
-          <SubmitButton handleSubmit={handleSubmit}>
-            <Text style={styles.buttonText}>Pay Service</Text>
-          </SubmitButton>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Pay amount</Text>
+          <Text style={styles.money}>${state.serviceInfo.servicePrice}</Text>
         </View>
+        <View style={styles.inputContainer}>
+          <View style={styles.iconContainer}>
+            <Feather name="credit-card" size={24} color="grey" />
+          </View>
+          <TextInput
+            autoCapitalize="none"
+            style={styles.input}
+            onChangeText={(text) => handleChangeText('cardNumber', text)}
+            placeholder="Enter your credit card number"
+            keyboardType="number-pad"
+          />
+        </View>
+        <DropDownPicker
+          open={openM}
+          value={form?.expMonth}
+          items={month}
+          setOpen={setOpenM}
+          setValue={handleMonthText}
+          setItems={setMonth}
+          placeholder="Select the expiration month"
+          style={styles.list}
+          placeholderStyle={{ fontSize: 18, paddingLeft: 10, color: 'grey' }}
+          dropDownContainerStyle={styles.listBox}
+          textStyle={{ fontSize: 18, paddingLeft: 10 }}
+          zIndex={2000}
+          zIndexInverse={2000}
+        />
+        <DropDownPicker
+          open={openY}
+          value={form?.expYear}
+          items={year}
+          setOpen={setOpenY}
+          setValue={handleYearText}
+          setItems={setYear}
+          placeholder="Select the expiration year"
+          style={styles.list}
+          placeholderStyle={{ fontSize: 18, paddingLeft: 10, color: 'grey' }}
+          dropDownContainerStyle={styles.listBox}
+          textStyle={{ fontSize: 18, paddingLeft: 10 }}
+          zIndex={1000}
+          zIndexInverse={3000}
+        />
+        <View style={styles.inputContainer}>
+          <View style={styles.iconContainer}>
+            <Feather name="credit-card" size={24} color="grey" />
+          </View>
+          <TextInput
+            autoCapitalize="none"
+            style={styles.input}
+            onChangeText={(text) => handleChangeText('cvc', text)}
+            placeholder="Enter your credit card cvc"
+            keyboardType="number-pad"
+          />
+        </View>
+        {error && <Text style={styles.error}>{error}</Text>}
+        <SubmitButton handleSubmit={handleSubmit}>
+          <Text style={styles.buttonText}>Pay Service</Text>
+        </SubmitButton>
       </View>
     </View>
   )
