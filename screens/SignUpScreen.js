@@ -198,7 +198,7 @@ const SignUpScreen = ({ navigation }) => {
           setItems={setItems}
           placeholder="Select your role"
           style={styles.list}
-          placeholderStyle={{ fontSize: 18, paddingLeft: 10, color: 'grey' }}
+          placeholderStyle={{ fontSize: 18, paddingLeft: 10, color: 's' }}
           dropDownContainerStyle={styles.listBox}
           zIndex={3000}
         />

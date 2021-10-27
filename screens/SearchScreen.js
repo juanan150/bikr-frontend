@@ -96,7 +96,7 @@ const SearchScreen = ({ navigation }) => {
         />
         <Image source={userImage} style={styles.image} />
       </View>
-      <Text style={styles.span}>Hi {state.user.name},</Text>
+      <Text style={styles.span}>Hi {state?.user?.name},</Text>
       <Text style={styles.title}>Are you looking for a Service?</Text>
       {error ? (
         <View>

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable implicit-arrow-linebreak */
 import React, { useEffect, useState, useContext } from 'react'
@@ -65,6 +66,15 @@ const styles = StyleSheet.create({
   listText: {
     fontSize: 18,
     color: '#1c1919',
+  },
+  moneyText: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
+  money: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   input: {
     height: 50,
@@ -200,6 +210,7 @@ const RepairShopScreen = ({ route, navigation }) => {
                     setServiceReq({
                       ...serviceReq,
                       serviceName: service.serviceName,
+                      serviceDetails: service.serviceDetails,
                       servicePrice: service.price,
                     })
                   }
@@ -207,6 +218,11 @@ const RepairShopScreen = ({ route, navigation }) => {
                 />
               </View>
             ))}
+          </View>
+          <View style={styles.moneyText}>
+            <Text style={styles.money}>
+              Total: ${serviceReq.servicePrice || 0}
+            </Text>
           </View>
           <Text style={styles.serviceTitle}>Schedule your Service</Text>
           <View style={styles.inputContainer}>

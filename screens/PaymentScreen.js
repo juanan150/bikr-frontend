@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TextInput, Alert } from 'react-native'
 import PropTypes from 'prop-types'
 import DropDownPicker from 'react-native-dropdown-picker'
+import { Feather } from '@expo/vector-icons'
 
 import AppContext from '../context/AppContext'
 import SubmitButton from '../components/SubmitButton'
@@ -10,70 +11,72 @@ import SubmitButton from '../components/SubmitButton'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFEEDD',
+    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  formContainer: {
-    backgroundColor: '#FFA347',
-    marginBottom: 15,
-    paddingRight: 20,
-    paddingLeft: 20,
-    paddingBottom: 20,
-    borderWidth: 2,
-    borderRadius: 20,
-    elevation: 10,
-    shadowColor: '#1c1919',
-  },
+
   title: {
-    marginBottom: 10,
-    marginTop: 20,
-    fontSize: 26,
-    fontWeight: 'bold',
+    marginBottom: 20,
     alignSelf: 'center',
-  },
-  form: {
-    paddingLeft: 20,
-  },
-  text: {
     color: '#1c1919',
-    fontSize: 22,
-    marginTop: 5,
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconContainer: {
+    height: 60,
+    width: 40,
+    marginBottom: 12,
+    justifyContent: 'center',
+    paddingLeft: 10,
+    backgroundColor: '#EBEBEC',
+    borderBottomLeftRadius: 5,
+    borderTopLeftRadius: 5,
   },
   input: {
-    color: '#1c1919',
-    height: 40,
-    marginBottom: 20,
-    padding: 10,
+    height: 60,
+    marginBottom: 12,
+    padding: 20,
+    paddingLeft: 10,
     width: 300,
-    borderBottomWidth: 1,
-    borderRadius: 5,
+    color: '#1c1919',
+    backgroundColor: '#EBEBEC',
+    borderBottomRightRadius: 5,
+    borderTopRightRadius: 5,
     fontSize: 18,
   },
   list: {
-    color: '#1c1919',
-    height: 40,
-    marginBottom: 20,
-    padding: 10,
-    width: 300,
+    height: 60,
+    marginBottom: 12,
+    padding: 20,
+    width: 340,
+    color: 'grey',
     borderRadius: 5,
-    backgroundColor: '#FFA347',
+    borderWidth: 0,
+    backgroundColor: '#EBEBEC',
   },
   listBox: {
     color: '#1c1919',
-    width: 300,
+    width: 340,
     fontSize: 18,
-    backgroundColor: '#FFA347',
+    backgroundColor: '#EBEBEC',
+    borderWidth: 0,
   },
   buttonText: {
-    color: '#1c1919',
+    color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   error: {
     color: 'red',
-    fontSize: 22,
+    fontSize: 18,
     marginBottom: 10,
   },
 })
@@ -166,19 +169,23 @@ const PaymentScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.formContainer}>
+      <View>
         <Text style={styles.title}>
-          Payment for {state.serviceInfo.serviceName}
+          Payment for {state.serviceInfo.serviceDetails}
         </Text>
         <View style={styles.form}>
-          <Text style={styles.text}>Cerdit Card Number</Text>
-          <TextInput
-            autoCapitalize="none"
-            style={styles.input}
-            onChangeText={(text) => handleChangeText('cardNumber', text)}
-            placeholder="Enter credit card number"
-            keyboardType="number-pad"
-          />
+          <View style={styles.inputContainer}>
+            <View style={styles.iconContainer}>
+              <Feather name="credit-card" size={24} color="grey" />
+            </View>
+            <TextInput
+              autoCapitalize="none"
+              style={styles.input}
+              onChangeText={(text) => handleChangeText('cardNumber', text)}
+              placeholder="Enter your credit card number"
+              keyboardType="number-pad"
+            />
+          </View>
           <DropDownPicker
             open={openM}
             value={form?.expMonth}
@@ -207,14 +214,18 @@ const PaymentScreen = ({ navigation }) => {
             zIndex={1000}
             zIndexInverse={3000}
           />
-          <Text style={styles.text}>Cerdit Card CVC Number</Text>
-          <TextInput
-            autoCapitalize="none"
-            style={styles.input}
-            onChangeText={(text) => handleChangeText('cvc', text)}
-            placeholder="Enter credit card cvc"
-            keyboardType="number-pad"
-          />
+          <View style={styles.inputContainer}>
+            <View style={styles.iconContainer}>
+              <Feather name="credit-card" size={24} color="grey" />
+            </View>
+            <TextInput
+              autoCapitalize="none"
+              style={styles.input}
+              onChangeText={(text) => handleChangeText('cvc', text)}
+              placeholder="Enter your credit card cvc"
+              keyboardType="number-pad"
+            />
+          </View>
           {error && <Text style={styles.error}>{error}</Text>}
           <SubmitButton handleSubmit={handleSubmit}>
             <Text style={styles.buttonText}>Pay Service</Text>
