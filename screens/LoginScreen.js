@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
+    marginTop: 20,
     height: 300,
     width: 300,
     resizeMode: 'contain',

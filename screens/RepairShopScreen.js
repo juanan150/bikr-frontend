@@ -14,7 +14,7 @@ import PropTypes from 'prop-types'
 import MapView, { Marker } from 'react-native-maps'
 import { RadioButton } from 'react-native-paper'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import { FontAwesome } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons'
 import { useIsFocused } from '@react-navigation/native'
 
 import SubmitButton from '../components/SubmitButton'
@@ -23,14 +23,15 @@ import AppContext from '../context/AppContext'
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFEEDD',
+    backgroundColor: '#fff',
   },
   scrollView: {
     alignItems: 'center',
   },
   title: {
-    marginBottom: 10,
     marginTop: 20,
+    alignSelf: 'center',
+    color: '#1c1919',
     fontSize: 30,
     fontWeight: 'bold',
   },
@@ -43,46 +44,56 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: '#1c1919',
   },
-  list: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingRight: 30,
-    width: 150,
-  },
   serviceContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     width: 300,
   },
-  dateContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    width: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   serviceTitle: {
     marginTop: 20,
+    marginBottom: 5,
     fontSize: 26,
     fontWeight: 'bold',
+  },
+  list: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingRight: 30,
+    width: 150,
   },
   listText: {
     fontSize: 18,
     color: '#1c1919',
   },
   input: {
-    color: '#1c1919',
-    height: 40,
-    marginBottom: 12,
+    height: 50,
     padding: 10,
-    width: 150,
-    borderBottomWidth: 1,
-    borderRadius: 5,
+    paddingLeft: 10,
+    width: 130,
+    color: 'grey',
+    backgroundColor: '#EBEBEC',
+    borderBottomRightRadius: 25,
+    borderTopRightRadius: 25,
     fontSize: 18,
   },
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  iconContainer: {
+    height: 50,
+    width: 40,
+    justifyContent: 'center',
+    paddingLeft: 10,
+    backgroundColor: '#EBEBEC',
+    borderBottomLeftRadius: 25,
+    borderTopLeftRadius: 25,
+  },
   buttonText: {
-    color: '#1c1919',
+    color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -198,30 +209,32 @@ const RepairShopScreen = ({ route, navigation }) => {
             ))}
           </View>
           <Text style={styles.serviceTitle}>Schedule your Service</Text>
-          <View style={styles.dateContainer}>
-            <FontAwesome
-              name="calendar"
-              size={24}
-              color="#1c1919"
-              onPress={showDatepicker}
-            />
+          <View style={styles.inputContainer}>
+            <View style={styles.iconContainer}>
+              <Feather
+                name="calendar"
+                size={24}
+                color="grey"
+                onPress={showDatepicker}
+              />
+            </View>
+
             <TextInput
               editable={false}
               style={styles.input}
               value={dateString}
-              onPress={showDatepicker}
             />
-            {show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={serviceReq.scheduledDate}
-                mode="date"
-                is24Hour
-                display="default"
-                onChange={handleDateChange}
-              />
-            )}
           </View>
+          {show && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={serviceReq.scheduledDate}
+              mode="date"
+              is24Hour
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
           {error && <Text style={styles.error}>{error}</Text>}
           <SubmitButton handleSubmit={handleSubmit}>
             <Text style={styles.buttonText}>Schedule</Text>
