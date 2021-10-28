@@ -94,7 +94,12 @@ const SearchScreen = ({ navigation }) => {
           title="Services"
           handleChangeInput={searchServicesDebounced}
         />
-        <Image source={userImage} style={styles.image} />
+        <Image
+          source={
+            state?.user?.imageUrl ? { uri: state?.user?.imageUrl } : userImage
+          }
+          style={styles.image}
+        />
       </View>
       <Text style={styles.span}>Hi {state?.user?.name},</Text>
       <Text style={styles.title}>Are you looking for a Service?</Text>

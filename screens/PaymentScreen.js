@@ -28,6 +28,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2771a',
     padding: 5,
     fontSize: 30,
+    fontWeight: 'bold',
     borderRadius: 10,
   },
   titleContainer: {
@@ -169,6 +170,7 @@ const PaymentScreen = ({ navigation }) => {
         [
           {
             text: 'Cancel',
+            // eslint-disable-next-line no-console
             onPress: () => console.log('Cancel Pressed'),
             style: 'cancel',
           },

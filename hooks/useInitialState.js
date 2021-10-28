@@ -147,6 +147,36 @@ const useInitialState = () => {
     }
   }
 
+  const updateProfile = async (payload) => {
+    try {
+      const formData = new FormData()
+      formData.append('name', payload.name)
+      formData.append('_id', state.user._id)
+      formData.append('image', {
+        uri: payload.uri,
+        name: payload.uri.split('/').pop(),
+        type: `image/${payload.uri.split('.').pop()}`,
+      })
+
+      const response = await customAxios.put(
+        `/api/users/${state.user._id}`,
+        formData,
+      )
+
+      setState({
+        ...state,
+        user: {
+          ...response.data,
+        },
+      })
+    } catch (e) {
+      setState({
+        ...state,
+        error: e.response.data.error,
+      })
+    }
+  }
+
   const resetError = () => {
     setState({
       ...state,
@@ -165,6 +195,7 @@ const useInitialState = () => {
     listRepairShops,
     requestService,
     generatePayment,
+    updateProfile,
   }
 }
 
