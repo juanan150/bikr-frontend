@@ -152,11 +152,13 @@ const useInitialState = () => {
       const formData = new FormData()
       formData.append('name', payload.name)
       formData.append('_id', state.user._id)
-      formData.append('image', {
-        uri: payload.uri,
-        name: payload.uri.split('/').pop(),
-        type: `image/${payload.uri.split('.').pop()}`,
-      })
+      if (payload.uri) {
+        formData.append('image', {
+          uri: payload.uri,
+          name: payload.uri.split('/').pop(),
+          type: `image/${payload.uri.split('.').pop()}`,
+        })
+      }
 
       const response = await customAxios.put(
         `/api/users/${state.user._id}`,

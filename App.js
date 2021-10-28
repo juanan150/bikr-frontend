@@ -18,6 +18,7 @@ import PaymentScreen from './screens/PaymentScreen'
 const icons = {
   SearchStack: 'tools',
   Profile: 'user',
+  ServicesStack: 'list-alt',
 }
 
 const Stack = createNativeStackNavigator()
@@ -58,6 +59,53 @@ SearchStack.propTypes = {
   }).isRequired,
 }
 
+function ServicesStack({ navigation }) {
+  return (
+    <DetailStack.Navigator>
+      <DetailStack.Screen
+        name="Services"
+        options={{
+          headerRight: () => <Logout {...navigation} />,
+        }}
+        component={SearchScreen}
+      />
+      <DetailStack.Screen
+        name="RepairShopDetail"
+        options={{
+          title: 'Repair Shop',
+        }}
+        component={RepairShopScreen}
+      />
+    </DetailStack.Navigator>
+  )
+}
+
+ServicesStack.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+}
+
+function ProfileStack({ navigation }) {
+  return (
+    <DetailStack.Navigator>
+      <DetailStack.Screen
+        name="Profile"
+        options={{
+          headerRight: () => <Logout {...navigation} />,
+        }}
+        component={ProfileScreen}
+      />
+    </DetailStack.Navigator>
+  )
+}
+
+ProfileStack.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+}
+
 function LandingScreen() {
   return (
     <Tab.Navigator
@@ -77,9 +125,30 @@ function LandingScreen() {
         }}
         component={SearchStack}
       />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="ServicesStack"
+        options={{
+          title: 'My Services',
+          headerShown: false,
+        }}
+        component={ServicesStack}
+      />
+      <Tab.Screen
+        name="ProfileStack"
+        options={{
+          title: 'Profile',
+          headerShown: false,
+        }}
+        component={ProfileStack}
+      />
     </Tab.Navigator>
   )
+}
+
+LandingScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
 }
 
 export default function App() {
