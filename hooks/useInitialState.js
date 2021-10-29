@@ -199,6 +199,23 @@ const useInitialState = () => {
     }
   }
 
+  const searchRepairShops = async (payload) => {
+    try {
+      const response = await customAxios.get(
+        `/api/repairshops/search?q=${payload}`,
+      )
+      setState({
+        ...state,
+        repairShopsInfo: response.data,
+      })
+    } catch (e) {
+      setState({
+        ...state,
+        error: e.response.data.error,
+      })
+    }
+  }
+
   const resetError = () => {
     setState({
       ...state,
@@ -219,6 +236,7 @@ const useInitialState = () => {
     generatePayment,
     updateProfile,
     getServices,
+    searchRepairShops,
   }
 }
 

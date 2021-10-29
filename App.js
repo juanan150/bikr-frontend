@@ -18,7 +18,7 @@ import MyServicesScreen from './screens/MyServicesScreen'
 
 const icons = {
   SearchStack: 'tools',
-  Profile: 'user',
+  ProfileStack: 'user',
   ServicesStack: 'list-alt',
 }
 

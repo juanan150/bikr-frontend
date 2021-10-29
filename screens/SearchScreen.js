@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable no-use-before-define */
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { View, Text, FlatList, StyleSheet, Image } from 'react-native'
 import PropTypes from 'prop-types'
 import { useIsFocused } from '@react-navigation/native'
-// import debounce from 'lodash/debounce'
+import debounce from 'lodash/debounce'
 
 import SearchBar from '../components/SearchBar'
 import AppContext from '../context/AppContext'
@@ -57,13 +57,15 @@ const styles = StyleSheet.create({
 })
 
 const SearchScreen = ({ navigation }) => {
-  const { state, listRepairShops, resetError } = useContext(AppContext)
+  const { state, listRepairShops, resetError, searchRepairShops } =
+    useContext(AppContext)
   const [repairShops, setRepairShops] = useState({
     page: 0,
     count: 0,
     repairShops: [],
   })
   const [error, setError] = useState(null)
+  const [search, setSearch] = useState('')
   const isVisible = useIsFocused()
 
   useEffect(() => {
@@ -76,16 +78,18 @@ const SearchScreen = ({ navigation }) => {
     setError(state.error)
   }, [state])
 
-  // const handleServiceSearch = (text) => {
-
-  // }
-
-  const searchServicesDebounced = () => {
-    // debounce(handleServiceSearch, 900)
+  const handleServiceSearch = (text) => {
+    setSearch(text)
+    searchRepairShops(text)
   }
 
+  const searchServicesDebounced = useCallback(
+    debounce(handleServiceSearch, 900),
+    [],
+  )
+
   const listNextRepairShops = (page = 1) => {
-    listRepairShops(page)
+    search === '' && listRepairShops(page)
   }
   return (
     <View style={styles.screen}>
