@@ -8,7 +8,7 @@ import { useIsFocused } from '@react-navigation/native'
 
 import SearchBar from '../components/SearchBar'
 import AppContext from '../context/AppContext'
-import RepairShopCard from '../components/RepairShopCard'
+import RepairShopCard from '../components/cards/RepairShopCard'
 import userImage from '../assets/user-dummy.png'
 
 const styles = StyleSheet.create({

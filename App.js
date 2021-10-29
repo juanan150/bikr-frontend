@@ -14,6 +14,7 @@ import Logout from './components/Logout'
 import useInitialState from './hooks/useInitialState'
 import RepairShopScreen from './screens/RepairShopScreen'
 import PaymentScreen from './screens/PaymentScreen'
+import myServices from './screens/myServices'
 
 const icons = {
   SearchStack: 'tools',
@@ -63,11 +64,12 @@ function ServicesStack({ navigation }) {
   return (
     <DetailStack.Navigator>
       <DetailStack.Screen
-        name="Services"
+        name="MyServices"
         options={{
+          title: 'My Services',
           headerRight: () => <Logout {...navigation} />,
         }}
-        component={SearchScreen}
+        component={myServices}
       />
       <DetailStack.Screen
         name="RepairShopDetail"

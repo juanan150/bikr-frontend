@@ -12,6 +12,7 @@ const initialState = {
     repairShops: [],
   },
   payed: false,
+  userServices: [],
 }
 
 const useInitialState = () => {
@@ -179,6 +180,21 @@ const useInitialState = () => {
     }
   }
 
+  const getServices = async (payload) => {
+    try {
+      const response = await customAxios.get(`/api/users/${payload}/services`)
+      setState({
+        ...state,
+        userServices: response.data,
+      })
+    } catch (e) {
+      setState({
+        ...state,
+        error: e.response.data.error,
+      })
+    }
+  }
+
   const resetError = () => {
     setState({
       ...state,
@@ -198,6 +214,7 @@ const useInitialState = () => {
     requestService,
     generatePayment,
     updateProfile,
+    getServices,
   }
 }
 
