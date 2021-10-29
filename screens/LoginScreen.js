@@ -1,12 +1,47 @@
-import React from "react";
-import { View, Text } from "react-native";
+/* eslint-disable object-curly-newline */
+import React from 'react'
+import { View, StyleSheet, Image, KeyboardAvoidingView } from 'react-native'
+import PropTypes from 'prop-types'
 
-const LoginScreen = () => {
-  return (
-    <View>
-      <Text></Text>
+import LoginForm from '../components/forms/LoginForm'
+import logo from '../assets/bikr-logo1.png'
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  formContainer: {
+    flex: 2,
+  },
+  image: {
+    flex: 1,
+    marginTop: 20,
+    height: 300,
+    width: 300,
+    resizeMode: 'contain',
+  },
+})
+
+const LoginScreen = ({ navigation }) => (
+  <KeyboardAvoidingView
+    behavior="height"
+    enabled="false"
+    style={styles.container}
+  >
+    <Image source={logo} style={styles.image} />
+    <View style={styles.formContainer}>
+      <LoginForm navigation={navigation} />
     </View>
-  );
-};
+  </KeyboardAvoidingView>
+)
 
-export default LoginScreen;
+LoginScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+}
+
+export default LoginScreen
