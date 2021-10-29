@@ -78,6 +78,7 @@ const ServiceCard = (props) => {
     const { router, ...repairShop } = props
     router.navigate('RepairShopDetail', {
       repairShop,
+      schedule: false,
     })
   }
 
@@ -101,7 +102,7 @@ const ServiceCard = (props) => {
             .format('DD/MM/YYYY')}
         </Text>
         <View style={styles.schedule}>
-          <Text style={styles.scheduleText}>Details</Text>
+          <Text style={styles.scheduleText}>See On Map</Text>
           <Feather name="arrow-right" size={22} color="#f2771a" />
         </View>
       </View>
@@ -116,7 +117,7 @@ ServiceCard.propTypes = {
   imageUrl: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   address: PropTypes.string.isRequired,
-  scheduleDate: PropTypes.string.isRequired,
+  scheduleDate: PropTypes.number.isRequired,
   service: PropTypes.shape({
     serviceName: PropTypes.string.isRequired,
     serviceDetails: PropTypes.string.isRequired,

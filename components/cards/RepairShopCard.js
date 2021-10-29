@@ -81,6 +81,7 @@ const RepairShopCard = (props) => {
     const { router, ...repairShop } = props
     router.navigate('RepairShopDetail', {
       repairShop,
+      schedule: true,
     })
   }
   return (

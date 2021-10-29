@@ -117,9 +117,9 @@ const styles = StyleSheet.create({
 
 const RepairShopScreen = ({ route, navigation }) => {
   const { state, resetError, requestService } = useContext(AppContext)
-  const { repairShop } = route?.params
+  const { repairShop, schedule } = route?.params
   const [serviceReq, setServiceReq] = useState({
-    scheduledDate: new Date(),
+    scheduleDate: new Date(),
     done: false,
     repairShopId: repairShop._id,
     repairShopName: repairShop.name,
@@ -131,11 +131,11 @@ const RepairShopScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     setDateString(
-      `${serviceReq.scheduledDate.getFullYear()}-${
-        serviceReq.scheduledDate.getMonth() + 1
-      }-${serviceReq.scheduledDate.getDate()}`,
+      `${serviceReq.scheduleDate.getFullYear()}-${
+        serviceReq.scheduleDate.getMonth() + 1
+      }-${serviceReq.scheduleDate.getDate()}`,
     )
-  }, [serviceReq.scheduledDate])
+  }, [serviceReq.scheduleDate])
 
   useEffect(() => {
     setError(state.error)
@@ -155,16 +155,16 @@ const RepairShopScreen = ({ route, navigation }) => {
   }
 
   const handleDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || serviceReq.scheduledDate
+    const currentDate = selectedDate || serviceReq.scheduleDate
     setShow(Platform.OS === 'ios')
     setServiceReq(() => ({
       ...serviceReq,
-      scheduledDate: currentDate,
+      scheduleDate: currentDate,
     }))
   }
 
   const handleSubmit = () => {
-    if (!serviceReq.scheduledDate || !serviceReq.serviceName) {
+    if (!serviceReq.scheduleDate || !serviceReq.serviceName) {
       setError('* All fields are required')
     } else {
       setServiceReq({ ...serviceReq, done: true })
@@ -174,92 +174,92 @@ const RepairShopScreen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.screen}>
-      {repairShop.services.length > 0 ? (
-        <ScrollView contentContainerStyle={styles.scrollView}>
-          <Text style={styles.title}>{repairShop.name}</Text>
-          <Text style={styles.text}>{repairShop.address}</Text>
-          <MapView
-            style={styles.map}
-            initialRegion={{
+      <ScrollView contentContainerStyle={styles.scrollView}>
+        <Text style={styles.title}>{repairShop.name}</Text>
+        <Text style={styles.text}>{repairShop.address}</Text>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: repairShop.latitude,
+            longitude: repairShop.longitude,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+        >
+          <Marker
+            key="1"
+            coordinate={{
               latitude: repairShop.latitude,
               longitude: repairShop.longitude,
-              latitudeDelta: 0.01,
-              longitudeDelta: 0.01,
             }}
-          >
-            <Marker
-              key="1"
-              coordinate={{
-                latitude: repairShop.latitude,
-                longitude: repairShop.longitude,
-              }}
-            />
-          </MapView>
-          <Text style={styles.serviceTitle}>Select your Service</Text>
-          <View style={styles.serviceContainer}>
-            {repairShop.services.map((service) => (
-              <View style={styles.list} key={service.serviceName}>
-                <Text style={styles.listText}>{service.serviceDetails}</Text>
-                <RadioButton
-                  value={service.serviceName}
-                  status={
-                    serviceReq.serviceName === service.serviceName
-                      ? 'checked'
-                      : 'unchecked'
-                  }
-                  onPress={() =>
-                    setServiceReq({
-                      ...serviceReq,
-                      serviceName: service.serviceName,
-                      serviceDetails: service.serviceDetails,
-                      servicePrice: service.price,
-                    })
-                  }
-                  color="#FFA347"
+          />
+        </MapView>
+        {schedule && (
+          <>
+            <Text style={styles.serviceTitle}>Select your Service</Text>
+            <View style={styles.serviceContainer}>
+              {repairShop?.services?.map((service) => (
+                <View style={styles.list} key={service.serviceName}>
+                  <Text style={styles.listText}>{service.serviceDetails}</Text>
+                  <RadioButton
+                    value={service.serviceName}
+                    status={
+                      serviceReq.serviceName === service.serviceName
+                        ? 'checked'
+                        : 'unchecked'
+                    }
+                    onPress={() =>
+                      setServiceReq({
+                        ...serviceReq,
+                        serviceName: service.serviceName,
+                        serviceDetails: service.serviceDetails,
+                        servicePrice: service.price,
+                      })
+                    }
+                    color="#FFA347"
+                  />
+                </View>
+              ))}
+            </View>
+            <View style={styles.moneyText}>
+              <Text style={styles.money}>
+                Total: ${serviceReq.servicePrice || 0}
+              </Text>
+            </View>
+            <Text style={styles.serviceTitle}>Schedule your Service</Text>
+            <View style={styles.inputContainer}>
+              <View style={styles.iconContainer}>
+                <Feather
+                  name="calendar"
+                  size={24}
+                  color="grey"
+                  onPress={showDatepicker}
                 />
               </View>
-            ))}
-          </View>
-          <View style={styles.moneyText}>
-            <Text style={styles.money}>
-              Total: ${serviceReq.servicePrice || 0}
-            </Text>
-          </View>
-          <Text style={styles.serviceTitle}>Schedule your Service</Text>
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Feather
-                name="calendar"
-                size={24}
-                color="grey"
-                onPress={showDatepicker}
+
+              <TextInput
+                editable={false}
+                style={styles.input}
+                value={dateString}
               />
             </View>
-
-            <TextInput
-              editable={false}
-              style={styles.input}
-              value={dateString}
-            />
-          </View>
-          {show && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={serviceReq.scheduledDate}
-              mode="date"
-              is24Hour
-              display="default"
-              onChange={handleDateChange}
-            />
-          )}
-          {error && <Text style={styles.error}>{error}</Text>}
-          <SubmitButton handleSubmit={handleSubmit}>
-            <Text style={styles.buttonText}>Schedule</Text>
-          </SubmitButton>
-        </ScrollView>
-      ) : (
-        <Text>Loading</Text>
-      )}
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={serviceReq.scheduleDate}
+                mode="date"
+                is24Hour
+                display="default"
+                onChange={handleDateChange}
+              />
+            )}
+            {error && <Text style={styles.error}>{error}</Text>}
+            <SubmitButton handleSubmit={handleSubmit}>
+              <Text style={styles.buttonText}>Schedule</Text>
+            </SubmitButton>
+          </>
+        )}
+      </ScrollView>
     </SafeAreaView>
   )
 }

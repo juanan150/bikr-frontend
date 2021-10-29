@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   list: {
-    flex: 1,
     display: 'flex',
     alignItems: 'center',
   },
@@ -56,7 +55,7 @@ const myServices = ({ navigation }) => {
           renderItem={({ item }) => (
             <ServiceCard {...item} router={navigation} />
           )}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item) => item.serviceId}
           numColumns={1}
           onEndReachedThreshold={10}
           contentContainerStyle={styles.list}

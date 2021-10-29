@@ -118,7 +118,10 @@ const useInitialState = () => {
   const requestService = (payload) => {
     setState({
       ...state,
-      serviceInfo: payload,
+      serviceInfo: {
+        ...payload,
+        scheduleDate: new Date(payload.scheduleDate).getTime(),
+      },
     })
   }
 
@@ -134,6 +137,7 @@ const useInitialState = () => {
         service: state.serviceInfo.serviceName,
         repairShopId: state.serviceInfo.repairShopId,
         dues: 1,
+        scheduleDate: state.serviceInfo.scheduleDate,
       }
       await customAxios.post('/api/transactions', data)
       setState({
