@@ -15,6 +15,7 @@ import useInitialState from './hooks/useInitialState'
 import RepairShopScreen from './screens/RepairShopScreen'
 import PaymentScreen from './screens/PaymentScreen'
 import MyServicesScreen from './screens/MyServicesScreen'
+import CreateRepairShopScreen from './screens/CreateRepairShopScreen'
 
 const icons = {
   SearchStack: 'tools',
@@ -175,6 +176,15 @@ export default function App() {
             name="SignUp"
             component={SignUpScreen}
             options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="CreateRepairShop"
+            component={CreateRepairShopScreen}
+            options={{
+              title: 'Create Repair Shop',
+              headerShown: false,
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

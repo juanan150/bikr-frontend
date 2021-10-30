@@ -13,6 +13,8 @@ const initialState = {
   },
   payed: false,
   userServices: [],
+  serviceInfo: {},
+  userRepairShop: {},
 }
 
 const useInitialState = () => {
@@ -86,7 +88,26 @@ const useInitialState = () => {
     setState(initialState)
   }
 
-  // const searchService = () => {}
+  const createRepairShop = async (payload) => {
+    try {
+      const response = await customAxios.post('/api/repairshops', {
+        ...payload,
+      })
+
+      await loginUser({ email: payload.email, password: payload.password })
+      setState({
+        ...state,
+        userRepairShop: {
+          ...response.data,
+        },
+      })
+    } catch (e) {
+      setState({
+        ...state,
+        error: e.response.data.error,
+      })
+    }
+  }
 
   const listRepairShops = async (page) => {
     try {
@@ -237,6 +258,7 @@ const useInitialState = () => {
     updateProfile,
     getServices,
     searchRepairShops,
+    createRepairShop,
   }
 }
 

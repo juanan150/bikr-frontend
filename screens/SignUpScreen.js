@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: 18,
     marginBottom: 10,
+    width: 350,
   },
 })
 
@@ -99,7 +100,11 @@ const SignUpScreen = ({ navigation }) => {
   useEffect(() => {
     setError(state.error)
     if (!state.error && state.user) {
-      navigation.navigate('Home')
+      if (state.user.role === 'user') {
+        navigation.navigate('Home')
+      } else {
+        navigation.navigate('CreateRepairShop')
+      }
     }
   }, [state])
 

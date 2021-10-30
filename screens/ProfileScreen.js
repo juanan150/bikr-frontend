@@ -1,18 +1,7 @@
 import React, { useContext } from 'react'
-import {
-  View,
-  Image,
-  StyleSheet,
-  Alert,
-  TouchableOpacity,
-  TextInput,
-  Text,
-} from 'react-native'
-import { Feather } from '@expo/vector-icons'
-import * as ImagePicker from 'expo-image-picker'
-
-import userImage from '../assets/user-dummy.png'
+import { View, StyleSheet, TextInput, Text } from 'react-native'
 import AppContext from '../context/AppContext'
+import ImageComp from '../components/ImageComp'
 
 const styles = StyleSheet.create({
   container: {
@@ -61,30 +50,10 @@ const styles = StyleSheet.create({
 
 const ProfileScreen = () => {
   const { state, updateProfile } = useContext(AppContext)
-  const [form, setForm] = React.useState({ name: state.user.name })
+  const [form, setForm] = React.useState({ name: state?.user?.name })
 
-  const openImagePickerAsync = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [3, 3],
-      quality: 1,
-    })
-
-    if (result.cancelled === true) {
-      return
-    }
-
-    updateProfile({ uri: result.uri, name: state.user.name })
-  }
-
-  const handleOpenImagePickerAsync = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
-    if (status !== 'granted') {
-      Alert.alert('Permission to access files is required!')
-      return
-    }
-    openImagePickerAsync()
+  const handleUpdateImage = (imageUrl) => {
+    updateProfile({ uri: imageUrl, name: state?.user?.name })
   }
 
   const handleChangeText = (field, text) => {
@@ -100,20 +69,10 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image
-          source={
-            state?.user?.imageUrl ? { uri: state?.user?.imageUrl } : userImage
-          }
-          style={styles.image}
-        />
-        <TouchableOpacity
-          style={styles.iconContainer}
-          onPress={handleOpenImagePickerAsync}
-        >
-          <Feather name="camera" size={35} color="#fff" />
-        </TouchableOpacity>
-      </View>
+      <ImageComp
+        imageUrl={state?.user?.imageUrl || ''}
+        handleUpdateImage={handleUpdateImage}
+      />
       <TextInput
         style={styles.title}
         onBlur={updateName}
