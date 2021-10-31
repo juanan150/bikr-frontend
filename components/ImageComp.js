@@ -9,7 +9,8 @@ import userImage from '../assets/user-dummy.png'
 const styles = StyleSheet.create({
   imageContainer: {
     alignItems: 'center',
-    height: 350,
+    height: 300,
+    width: 250,
   },
   image: {
     flex: 1,
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
     height: 70,
     width: 70,
     position: 'absolute',
-    bottom: 10,
+    bottom: 0,
     right: 0,
     borderRadius: 35,
     alignItems: 'center',

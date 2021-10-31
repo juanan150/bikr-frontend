@@ -15,6 +15,7 @@ const initialState = {
   userServices: [],
   serviceInfo: {},
   userRepairShop: {},
+  repairshopServices: [],
 }
 
 const useInitialState = () => {
@@ -225,9 +226,60 @@ const useInitialState = () => {
       const response = await customAxios.get(
         `/api/repairshops/search?q=${payload}`,
       )
+
       setState({
         ...state,
         repairShopsInfo: response.data,
+      })
+    } catch (e) {
+      setState({
+        ...state,
+        error: e.response.data.error,
+      })
+    }
+  }
+
+  const listServices = async () => {
+    try {
+      const response = await customAxios.get('/api/services')
+      setState({
+        ...state,
+        availableServices: response.data,
+      })
+    } catch (e) {
+      setState({
+        ...state,
+        error: e.response.data.error,
+      })
+    }
+  }
+
+  const getRepairShopServices = async (payload) => {
+    try {
+      const response = await customAxios.get(
+        `/api/repairshops/${payload}/services`,
+      )
+      setState({
+        ...state,
+        repairshopServices: response.data,
+      })
+    } catch (e) {
+      setState({
+        ...state,
+        error: e.response.data.error,
+      })
+    }
+  }
+
+  const searchRepairShopServices = async (payload) => {
+    try {
+      const response = await customAxios.get(
+        `/api/repairshops/${payload.userId}/services?q=${payload.query}`,
+      )
+
+      setState({
+        ...state,
+        repairshopServices: response.data,
       })
     } catch (e) {
       setState({
@@ -259,6 +311,9 @@ const useInitialState = () => {
     getServices,
     searchRepairShops,
     createRepairShop,
+    listServices,
+    getRepairShopServices,
+    searchRepairShopServices,
   }
 }
 

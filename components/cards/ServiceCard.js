@@ -116,13 +116,16 @@ ServiceCard.propTypes = {
   }).isRequired,
   imageUrl: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
+  address: PropTypes.string,
   scheduleDate: PropTypes.number.isRequired,
   service: PropTypes.shape({
     serviceName: PropTypes.string.isRequired,
     serviceDetails: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
   }).isRequired,
+}
+ServiceCard.defaultProps = {
+  address: '',
 }
 
 export default ServiceCard

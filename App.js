@@ -25,37 +25,39 @@ const icons = {
 
 const Stack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
-const DetailStack = createNativeStackNavigator()
+const SearchStack = createNativeStackNavigator()
+const ServiceStack = createNativeStackNavigator()
+const profileStack = createNativeStackNavigator()
 
-function SearchStack({ navigation }) {
+function SearchesStack({ navigation }) {
   return (
-    <DetailStack.Navigator>
-      <DetailStack.Screen
+    <SearchStack.Navigator>
+      <SearchStack.Screen
         name="Services"
         options={{
           headerRight: () => <Logout {...navigation} />,
         }}
         component={SearchScreen}
       />
-      <DetailStack.Screen
+      <SearchStack.Screen
         name="RepairShopDetail"
         options={{
           title: 'Repair Shop',
         }}
         component={RepairShopScreen}
       />
-      <DetailStack.Screen
+      <SearchStack.Screen
         name="Payment"
         options={{
           title: 'Payment',
         }}
         component={PaymentScreen}
       />
-    </DetailStack.Navigator>
+    </SearchStack.Navigator>
   )
 }
 
-SearchStack.propTypes = {
+SearchesStack.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
@@ -63,8 +65,8 @@ SearchStack.propTypes = {
 
 function ServicesStack({ navigation }) {
   return (
-    <DetailStack.Navigator>
-      <DetailStack.Screen
+    <ServiceStack.Navigator>
+      <ServiceStack.Screen
         name="MyServicesScreen"
         options={{
           title: 'My Services',
@@ -72,14 +74,14 @@ function ServicesStack({ navigation }) {
         }}
         component={MyServicesScreen}
       />
-      <DetailStack.Screen
+      <ServiceStack.Screen
         name="RepairShopDetail"
         options={{
           title: 'Repair Shop',
         }}
         component={RepairShopScreen}
       />
-    </DetailStack.Navigator>
+    </ServiceStack.Navigator>
   )
 }
 
@@ -89,21 +91,21 @@ ServicesStack.propTypes = {
   }).isRequired,
 }
 
-function ProfileStack({ navigation }) {
+function ProfilesStack({ navigation }) {
   return (
-    <DetailStack.Navigator>
-      <DetailStack.Screen
+    <profileStack.Navigator>
+      <profileStack.Screen
         name="Profile"
         options={{
           headerRight: () => <Logout {...navigation} />,
         }}
         component={ProfileScreen}
       />
-    </DetailStack.Navigator>
+    </profileStack.Navigator>
   )
 }
 
-ProfileStack.propTypes = {
+ProfilesStack.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
@@ -121,12 +123,12 @@ function LandingScreen() {
       })}
     >
       <Tab.Screen
-        name="SearchStack"
+        name="SearchesStack"
         options={{
           title: 'Services',
           headerShown: false,
         }}
-        component={SearchStack}
+        component={SearchesStack}
       />
       <Tab.Screen
         name="ServicesStack"
@@ -137,12 +139,12 @@ function LandingScreen() {
         component={ServicesStack}
       />
       <Tab.Screen
-        name="ProfileStack"
+        name="ProfilesStack"
         options={{
           title: 'Profile',
           headerShown: false,
         }}
-        component={ProfileStack}
+        component={ProfilesStack}
       />
     </Tab.Navigator>
   )
