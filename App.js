@@ -18,8 +18,8 @@ import MyServicesScreen from './screens/MyServicesScreen'
 import CreateRepairShopScreen from './screens/CreateRepairShopScreen'
 
 const icons = {
-  SearchStack: 'tools',
-  ProfileStack: 'user',
+  SearchesStack: 'tools',
+  ProfilesStack: 'user',
   ServicesStack: 'list-alt',
 }
 

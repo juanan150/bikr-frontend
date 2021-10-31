@@ -72,9 +72,12 @@ const styles = StyleSheet.create({
 })
 
 const ServiceCard = (props) => {
-  const { imageUrl, name, address, service, scheduleDate } = props
+  const { imageUrl, name, address, service, scheduleDate, repairCard } = props
 
   const goToRepairShop = () => {
+    if (repairCard) {
+      return
+    }
     const { router, ...repairShop } = props
     router.navigate('RepairShopDetail', {
       repairShop,
@@ -101,10 +104,12 @@ const ServiceCard = (props) => {
             .utc()
             .format('DD/MM/YYYY')}
         </Text>
-        <View style={styles.schedule}>
-          <Text style={styles.scheduleText}>See On Map</Text>
-          <Feather name="arrow-right" size={22} color="#f2771a" />
-        </View>
+        {!repairCard && (
+          <View style={styles.schedule}>
+            <Text style={styles.scheduleText}>See On Map</Text>
+            <Feather name="arrow-right" size={22} color="#f2771a" />
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   )
@@ -123,9 +128,11 @@ ServiceCard.propTypes = {
     serviceDetails: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
   }).isRequired,
+  repairCard: PropTypes.bool,
 }
 ServiceCard.defaultProps = {
   address: '',
+  repairCard: false,
 }
 
 export default ServiceCard

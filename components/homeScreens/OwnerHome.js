@@ -104,7 +104,7 @@ const OwnerHome = ({ navigation }) => {
         <FlatList
           data={services}
           renderItem={({ item }) => (
-            <ServiceCard {...item} router={navigation} />
+            <ServiceCard {...item} repairCard router={navigation} />
           )}
           keyExtractor={(item) => item.serviceId}
           numColumns={1}
