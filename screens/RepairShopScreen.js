@@ -117,7 +117,6 @@ const styles = StyleSheet.create({
 
 const RepairShopScreen = ({ route, navigation }) => {
   const { state, resetError, requestService } = useContext(AppContext)
-  console.log(route?.params)
   let repairShop = {}
   if (route?.params.repairShop._id) {
     repairShop = route?.params.repairShop

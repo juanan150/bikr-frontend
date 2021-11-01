@@ -95,7 +95,9 @@ const SignUpScreen = ({ navigation }) => {
   const [errMsg, setErrMsg] = useState({})
   const [open, setOpen] = useState(false)
 
-  useEffect(() => resetError(), [])
+  useEffect(() => {
+    resetError()
+  }, [])
 
   useEffect(() => {
     setError(state.error)

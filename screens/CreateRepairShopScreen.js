@@ -117,7 +117,7 @@ const CreateRepairShopScreen = ({ navigation }) => {
   useEffect(() => {
     if (isVisible) {
       // resetError()
-      // listServices()
+      listServices()
     }
   }, [])
 

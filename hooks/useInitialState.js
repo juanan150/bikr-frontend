@@ -91,7 +91,7 @@ const useInitialState = () => {
 
   const logoutUser = () => {
     console.log('logout')
-    setState(initialState)
+    setState((prevState) => ({ ...prevState, ...initialState }))
   }
 
   const createRepairShop = async (payload) => {
@@ -273,7 +273,6 @@ const useInitialState = () => {
       const response = await customAxios.get(
         `/api/repairshops/${payload}/services`,
       )
-      console.log(state)
       setState((prevState) => ({
         ...prevState,
         repairshopServices: response.data,
@@ -322,11 +321,11 @@ const useInitialState = () => {
 
   const resetError = () => {
     console.log('reset err')
-    setState({
-      ...state,
+    setState((prevState) => ({
+      ...prevState,
       error: null,
       payed: false,
-    })
+    }))
   }
 
   return {
