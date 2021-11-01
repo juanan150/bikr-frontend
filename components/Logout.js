@@ -14,8 +14,8 @@ const Logout = ({ navigate }) => {
   const { logoutUser } = useContext(AppContext)
   const logout = async () => {
     await AsyncStorage.removeItem('@jaq/bikr-auth')
-    logoutUser()
     navigate('Login')
+    logoutUser()
   }
   return (
     <TouchableOpacity onPress={logout}>

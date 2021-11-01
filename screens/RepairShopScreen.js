@@ -117,7 +117,14 @@ const styles = StyleSheet.create({
 
 const RepairShopScreen = ({ route, navigation }) => {
   const { state, resetError, requestService } = useContext(AppContext)
-  const { repairShop, schedule } = route?.params
+  console.log(route?.params)
+  let repairShop = {}
+  if (route?.params.repairShop._id) {
+    repairShop = route?.params.repairShop
+  } else {
+    repairShop = state.repairShop
+  }
+  const { schedule } = route?.params
   const [serviceReq, setServiceReq] = useState({
     scheduleDate: new Date(),
     done: false,
@@ -271,12 +278,13 @@ RepairShopScreen.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
       repairShop: PropTypes.shape({
+        _id: PropTypes.string,
         name: PropTypes.string,
         address: PropTypes.string,
         imageUrl: PropTypes.string,
         services: PropTypes.arrayOf(
           PropTypes.shape({
-            serviceName: PropTypes.string.isRequires,
+            serviceName: PropTypes.string.isRequired,
             price: PropTypes.number.isRequired,
           }),
         ),

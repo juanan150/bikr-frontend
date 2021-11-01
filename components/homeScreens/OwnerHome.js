@@ -56,8 +56,12 @@ const styles = StyleSheet.create({
 })
 
 const OwnerHome = ({ navigation }) => {
-  const { state, searchRepairShopServices, getRepairShopServices } =
-    useContext(AppContext)
+  const {
+    state,
+    searchRepairShopServices,
+    getRepairShopServices,
+    getRepairShop,
+  } = useContext(AppContext)
   const [services, setServices] = React.useState([])
   const [error, setError] = useState(null)
   const isVisible = useIsFocused()
@@ -67,12 +71,13 @@ const OwnerHome = ({ navigation }) => {
   }
 
   useEffect(() => {
-    setServices(state.repairshopServices)
-    setError(state.error)
+    setServices(state?.repairshopServices)
+    setError(state?.error)
   }, [state])
 
   useEffect(() => {
-    getRepairShopServices(state.user._id)
+    getRepairShop(state?.user._id)
+    getRepairShopServices(state?.user._id)
   }, [isVisible])
 
   const searchServicesDebounced = useCallback(

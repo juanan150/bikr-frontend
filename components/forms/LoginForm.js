@@ -82,6 +82,7 @@ const LoginForm = ({ navigation }) => {
   const { state, loginUser, loadUser, resetError } = useContext(AppContext)
   const [form, setForm] = useState(null)
   const [error, setError] = useState(null)
+  const [logged, setLogged] = useState(false)
   const isVisible = useIsFocused()
 
   const goToSignUp = () => {
@@ -101,7 +102,8 @@ const LoginForm = ({ navigation }) => {
 
   useEffect(() => {
     setError(state.error)
-    if (!state.error && state.user) {
+    if (!state.error && state.user && logged) {
+      setLogged(false)
       navigation.navigate('Home')
     }
   }, [state])
@@ -120,12 +122,8 @@ const LoginForm = ({ navigation }) => {
     getData()
   }, [])
 
-  useEffect(() => {
-    setError(state.error)
-    !state.error && state.user && navigation.navigate('Home')
-  }, [state])
-
   const handleSubmit = async () => {
+    setLogged(true)
     await loginUser(form)
   }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -21,6 +21,7 @@ const icons = {
   SearchesStack: 'tools',
   ProfilesStack: 'user',
   ServicesStack: 'list-alt',
+  RepairStack: 'list-alt',
 }
 
 const Stack = createNativeStackNavigator()
@@ -112,6 +113,8 @@ ProfilesStack.propTypes = {
 }
 
 function LandingScreen() {
+  const { state } = useContext(AppContext)
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -130,14 +133,26 @@ function LandingScreen() {
         }}
         component={SearchesStack}
       />
-      <Tab.Screen
-        name="ServicesStack"
-        options={{
-          title: 'My Services',
-          headerShown: false,
-        }}
-        component={ServicesStack}
-      />
+      {state?.user?.role === 'user' ? (
+        <Tab.Screen
+          name="ServicesStack"
+          options={{
+            title: 'My Services',
+            headerShown: false,
+          }}
+          component={ServicesStack}
+        />
+      ) : (
+        <Tab.Screen
+          name="RepairStack"
+          options={{
+            title: 'My Repair Shop',
+            headerShown: false,
+          }}
+          component={RepairShopScreen}
+          initialParams={{ repairShop: state.repairShop, schedule: false }}
+        />
+      )}
       <Tab.Screen
         name="ProfilesStack"
         options={{

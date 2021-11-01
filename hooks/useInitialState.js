@@ -16,6 +16,7 @@ const initialState = {
   serviceInfo: {},
   userRepairShop: {},
   repairshopServices: [],
+  repairShop: {},
 }
 
 const useInitialState = () => {
@@ -23,6 +24,7 @@ const useInitialState = () => {
 
   const loginUser = async (payload) => {
     try {
+      console.log('login')
       const response = await customAxios.post('/api/users/login', {
         ...payload,
       })
@@ -30,8 +32,8 @@ const useInitialState = () => {
       await AsyncStorage.setItem('@jaq/bikr-auth', response.data.token)
       customAxios.defaults.headers.common.Authorization =
         await AsyncStorage.getItem('@jaq/bikr-auth')
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         user: {
           _id: response.data._id,
           email: response.data.email,
@@ -40,22 +42,23 @@ const useInitialState = () => {
           imageUrl: response.data.imageUrl,
         },
         error: null,
-      })
+      }))
     } catch (e) {
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         error: e.response.data.error,
-      })
+      }))
     }
   }
 
   const loadUser = async () => {
     try {
+      console.log('load')
       customAxios.defaults.headers.common.Authorization =
         await AsyncStorage.getItem('@jaq/bikr-auth')
       const response = await customAxios.get('/api/users/me')
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         user: {
           _id: response.data._id,
           email: response.data.email,
@@ -64,7 +67,7 @@ const useInitialState = () => {
           imageUrl: response.data.imageUrl,
         },
         error: null,
-      })
+      }))
     } catch (e) {
       // console.log(e)
     }
@@ -72,6 +75,7 @@ const useInitialState = () => {
 
   const signUpUser = async (payload) => {
     try {
+      console.log('signup')
       await customAxios.post('/api/users/signup', {
         ...payload,
       })
@@ -86,22 +90,24 @@ const useInitialState = () => {
   }
 
   const logoutUser = () => {
+    console.log('logout')
     setState(initialState)
   }
 
   const createRepairShop = async (payload) => {
     try {
+      console.log('create repair')
       const response = await customAxios.post('/api/repairshops', {
         ...payload,
       })
 
       await loginUser({ email: payload.email, password: payload.password })
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         userRepairShop: {
           ...response.data,
         },
-      })
+      }))
     } catch (e) {
       setState({
         ...state,
@@ -112,22 +118,23 @@ const useInitialState = () => {
 
   const listRepairShops = async (page) => {
     try {
+      console.log('list repair')
       const response = await customAxios.get(`/api/repairshops/?page=${page}`)
       if (page === 1) {
-        setState({
-          ...state,
+        setState((prevState) => ({
+          ...prevState,
           repairShopsInfo: response.data,
-        })
+        }))
       } else {
-        setState({
-          ...state,
+        setState((prevState) => ({
+          ...prevState,
           repairShopsInfo: {
             ...response.data,
             repairShops: state?.repairShopsInfo?.repairShops.concat(
               response.data.repairShops,
             ),
           },
-        })
+        }))
       }
     } catch (e) {
       setState({
@@ -138,17 +145,19 @@ const useInitialState = () => {
   }
 
   const requestService = (payload) => {
-    setState({
-      ...state,
+    console.log('request ser')
+    setState((prevState) => ({
+      ...prevState,
       serviceInfo: {
         ...payload,
         scheduleDate: new Date(payload.scheduleDate).getTime(),
       },
-    })
+    }))
   }
 
   const generatePayment = async (payload) => {
     try {
+      console.log('pay')
       const data = {
         cardNumber: payload.cardNumber,
         expYear: payload.expYear,
@@ -162,10 +171,10 @@ const useInitialState = () => {
         scheduleDate: state.serviceInfo.scheduleDate,
       }
       await customAxios.post('/api/transactions', data)
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         payed: true,
-      })
+      }))
     } catch (e) {
       setState({
         ...state,
@@ -176,6 +185,7 @@ const useInitialState = () => {
 
   const updateProfile = async (payload) => {
     try {
+      console.log('update prof')
       const formData = new FormData()
       formData.append('name', payload.name)
       formData.append('_id', state.user._id)
@@ -192,12 +202,12 @@ const useInitialState = () => {
         formData,
       )
 
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         user: {
           ...response.data,
         },
-      })
+      }))
     } catch (e) {
       setState({
         ...state,
@@ -208,11 +218,12 @@ const useInitialState = () => {
 
   const getServices = async (payload) => {
     try {
+      console.log('get servs')
       const response = await customAxios.get(`/api/users/${payload}/services`)
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         userServices: response.data,
-      })
+      }))
     } catch (e) {
       setState({
         ...state,
@@ -223,14 +234,15 @@ const useInitialState = () => {
 
   const searchRepairShops = async (payload) => {
     try {
+      console.log('search servs')
       const response = await customAxios.get(
         `/api/repairshops/search?q=${payload}`,
       )
 
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         repairShopsInfo: response.data,
-      })
+      }))
     } catch (e) {
       setState({
         ...state,
@@ -241,55 +253,75 @@ const useInitialState = () => {
 
   const listServices = async () => {
     try {
+      console.log('list servs')
       const response = await customAxios.get('/api/services')
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         availableServices: response.data,
-      })
+      }))
     } catch (e) {
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         error: e.response.data.error,
-      })
+      }))
     }
   }
 
   const getRepairShopServices = async (payload) => {
     try {
+      console.log('get repair servs')
       const response = await customAxios.get(
         `/api/repairshops/${payload}/services`,
       )
-      setState({
-        ...state,
+      console.log(state)
+      setState((prevState) => ({
+        ...prevState,
         repairshopServices: response.data,
-      })
+      }))
     } catch (e) {
       setState({
         ...state,
         error: e.response.data.error,
       })
+    }
+  }
+
+  const getRepairShop = async (payload) => {
+    try {
+      const response = await customAxios.get(`/api/repairshops/${payload}`)
+      setState((prevState) => ({
+        ...prevState,
+        repairShop: response.data,
+      }))
+    } catch (e) {
+      setState((prevState) => ({
+        ...prevState,
+        error: e.response.data.error,
+      }))
     }
   }
 
   const searchRepairShopServices = async (payload) => {
     try {
+      console.log('search repair servs')
       const response = await customAxios.get(
         `/api/repairshops/${payload.userId}/services?q=${payload.query}`,
       )
 
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         repairshopServices: response.data,
-      })
+      }))
     } catch (e) {
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         error: e.response.data.error,
-      })
+      }))
     }
   }
 
   const resetError = () => {
+    console.log('reset err')
     setState({
       ...state,
       error: null,
@@ -314,6 +346,7 @@ const useInitialState = () => {
     listServices,
     getRepairShopServices,
     searchRepairShopServices,
+    getRepairShop,
   }
 }
 
