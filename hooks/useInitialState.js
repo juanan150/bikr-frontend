@@ -166,7 +166,7 @@ const useInitialState = () => {
       const formData = new FormData()
       formData.append('name', payload.name)
       formData.append('address', payload.address)
-      formData.append('accountNumber', payload.bankAccount)
+      formData.append('accountNumber', payload.accountNumber)
       formData.append('latitude', payload.latitude)
       formData.append('longitude', payload.longitude)
       formData.append('services', JSON.stringify(payload.services))
@@ -180,7 +180,14 @@ const useInitialState = () => {
         })
       }
 
-      const response = await customAxios.post('/api/repairshops', formData)
+      let response = {}
+
+      if (payload.create) {
+        response = await customAxios.post('/api/repairshops', formData)
+      } else {
+        formData.append('_id', payload._id)
+        response = await customAxios.put('/api/repairshops', formData)
+      }
 
       setState((prevState) => ({
         ...prevState,

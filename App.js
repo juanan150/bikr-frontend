@@ -150,7 +150,6 @@ function LandingScreen() {
             headerShown: false,
           }}
           component={CreateRepairShopScreen}
-          initialParams={{ repairShop: state.repairShop }}
         />
       )}
       <Tab.Screen

@@ -4,8 +4,8 @@ export default function validateReg(values) {
 
   !values?.name && (errors.name = 'Name is required')
 
-  !values?.bankAccount &&
-    (errors.bankAccount = 'Bank account number is required')
+  !values?.accountNumber &&
+    (errors.accountNumber = 'Bank account number is required')
 
   !values?.address && (errors.address = 'Address is required')
 

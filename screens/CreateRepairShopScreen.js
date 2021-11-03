@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 /* eslint-disable react/jsx-curly-newline */
 /* eslint-disable implicit-arrow-linebreak */
 import React, { useState, useEffect, useContext } from 'react'
@@ -8,6 +9,7 @@ import {
   Text,
   TextInput,
   CheckBox,
+  Alert,
 } from 'react-native'
 import PropTypes from 'prop-types'
 import MapView, { Marker } from 'react-native-maps'
@@ -114,14 +116,14 @@ const styles = StyleSheet.create({
   },
 })
 
-const CreateRepairShopScreen = ({ navigation }) => {
+const CreateRepairShopScreen = ({ navigation, route }) => {
   const { state, createRepairShop, listServices, resetError } =
     useContext(AppContext)
-  const [form, setForm] = useState({
-    services: [],
-  })
+  const create = route?.params || false
+  const [form, setForm] = useState(state.repairShop)
   const [errMsg, setErrMsg] = useState({})
   const [services, setServices] = useState({})
+  const [submitted, setSubmitted] = useState(false)
   const isVisible = useIsFocused()
 
   const handleUpdateImage = (imageUrl) => {
@@ -146,7 +148,10 @@ const CreateRepairShopScreen = ({ navigation }) => {
   const handleSubmit = async () => {
     const errors = validateRepairShop(form)
     if (!Object.keys(errors).length) {
-      await createRepairShop(form)
+      setSubmitted(true)
+      create
+        ? await createRepairShop({ ...form, create: true })
+        : await createRepairShop({ ...form, create: false })
     } else {
       setErrMsg(errors)
     }
@@ -201,22 +206,56 @@ const CreateRepairShopScreen = ({ navigation }) => {
     })
   }
 
+  const populateServices = () => {
+    if (Object.keys(state.repairShop).length) {
+      state.repairShop.services.forEach((service) => {
+        state.availableServices.forEach((s) => {
+          s.serviceName === service.serviceName &&
+            setServices((prevState) => ({
+              ...prevState,
+              [s._id]: {
+                price: service.price,
+                checked: true,
+              },
+            }))
+        })
+      })
+    }
+  }
+
   useEffect(() => {
     if (isVisible) {
       resetError()
       listServices()
+      setSubmitted(false)
+      setErrMsg({})
     }
   }, [])
 
   useEffect(() => {
-    if (!state.error && Object.keys(state.repairShop).length) {
-      navigation.navigate('Home')
+    if (
+      !state.error &&
+      Object.keys(state.repairShop).length &&
+      submitted &&
+      isVisible
+    ) {
+      if (create) {
+        navigation.navigate('Home')
+      } else {
+        Alert.alert('Reapir Shop updates succesfully')
+      }
     }
   }, [state])
 
+  useEffect(() => {
+    state.availableServices && populateServices()
+  }, [state.availableServices])
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Create your Repair Shop</Text>
+      <Text style={styles.title}>
+        {create ? 'Create' : 'Edit'} your Repair Shop
+      </Text>
       <ImageComp
         imageUrl={form?.imageUrl || ''}
         handleUpdateImage={handleUpdateImage}
@@ -236,6 +275,7 @@ const CreateRepairShopScreen = ({ navigation }) => {
             style={styles.input}
             onChangeText={(text) => handleChangeText('name', text)}
             placeholder="Enter the repair shop name"
+            value={form.name}
           />
         </View>
         {errMsg.bankAccount && (
@@ -248,8 +288,9 @@ const CreateRepairShopScreen = ({ navigation }) => {
           <TextInput
             autoCapitalize="none"
             style={styles.input}
-            onChangeText={(text) => handleChangeText('bankAccount', text)}
+            onChangeText={(text) => handleChangeText('accountNumber', text)}
             placeholder="Enter your bank account"
+            value={form.accountNumber}
           />
         </View>
         {errMsg.address && <Text style={styles.error}>{errMsg.address}</Text>}
@@ -262,6 +303,7 @@ const CreateRepairShopScreen = ({ navigation }) => {
             style={styles.input}
             onChangeText={(text) => handleChangeText('address', text)}
             placeholder="Enter the repair shop address"
+            value={form.address}
           />
         </View>
         <Text style={styles.serviceTitle}>Select the location on the map</Text>
@@ -306,13 +348,16 @@ const CreateRepairShopScreen = ({ navigation }) => {
                 placeholder="Service price"
                 keyboardType="numeric"
                 onChangeText={(text) => handleChangePriceText(service, text)}
+                value={services?.[service._id]?.price.toString()}
               />
             </View>
           ))}
       </View>
 
       <SubmitButton handleSubmit={handleSubmit}>
-        <Text style={styles.buttonText}>Create Repair Shop</Text>
+        <Text style={styles.buttonText}>
+          {create ? 'Create' : 'Edit'} Repair Shop
+        </Text>
       </SubmitButton>
     </ScrollView>
   )
@@ -322,6 +367,19 @@ CreateRepairShopScreen.propTypes = {
   navigation: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      create: PropTypes.bool,
+    }),
+  }),
+}
+
+CreateRepairShopScreen.defaultProps = {
+  route: {
+    params: {
+      create: false,
+    },
+  },
 }
 
 export default CreateRepairShopScreen

@@ -108,7 +108,7 @@ const SignUpScreen = ({ navigation }) => {
       if (state.user.role === 'user') {
         navigation.navigate('Home')
       } else {
-        navigation.navigate('CreateRepairShop')
+        navigation.navigate('CreateRepairShop', { create: true })
       }
     }
   }, [state])
