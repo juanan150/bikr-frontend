@@ -1,6 +1,14 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Image, FlatList } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native'
 import PropTypes from 'prop-types'
 import { useIsFocused } from '@react-navigation/native'
 import debounce from 'lodash/debounce'
@@ -64,21 +72,25 @@ const OwnerHome = ({ navigation }) => {
   } = useContext(AppContext)
   const [services, setServices] = React.useState([])
   const [error, setError] = useState(null)
+  const [loading, setLoading] = React.useState(true)
   const isVisible = useIsFocused()
-
-  const handleServiceSearch = (text) => {
-    searchRepairShopServices({ userId: state.user._id, query: text })
-  }
 
   useEffect(() => {
     setServices(state?.repairshopServices)
     setError(state?.error)
+    setLoading(false)
   }, [state])
 
   useEffect(() => {
-    getRepairShop(state?.user._id)
-    getRepairShopServices(state?.user._id)
+    if (isVisible) {
+      getRepairShop(state?.user._id)
+      getRepairShopServices(state?.user._id)
+    }
   }, [isVisible])
+
+  const handleServiceSearch = (text) => {
+    searchRepairShopServices({ userId: state.user._id, query: text })
+  }
 
   const searchServicesDebounced = useCallback(
     debounce(handleServiceSearch, 900),
@@ -103,7 +115,11 @@ const OwnerHome = ({ navigation }) => {
       <Text style={styles.title}>Check out your scheduled Services</Text>
       {error ? (
         <View>
-          <Text>There is nothing here</Text>
+          <Text>You don&apos;t have any services scheduled</Text>
+        </View>
+      ) : loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#f2771a" />
         </View>
       ) : (
         <FlatList

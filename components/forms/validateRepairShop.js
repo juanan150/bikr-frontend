@@ -7,9 +7,12 @@ export default function validateReg(values) {
   !values?.bankAccount &&
     (errors.bankAccount = 'Bank account number is required')
 
-  !values?.address && (errors.address = 'Bank account number is required')
+  !values?.address && (errors.address = 'Address is required')
 
-  !values?.latitude && (errors.coords = 'Bank account number is required')
+  !values?.latitude && (errors.coords = 'Select the location on the map')
+
+  values?.services.length === 0 &&
+    (errors.services = 'At leat 1 service is required')
 
   return errors
 }

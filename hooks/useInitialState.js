@@ -14,7 +14,6 @@ const initialState = {
   payed: false,
   userServices: [],
   serviceInfo: {},
-  userRepairShop: {},
   repairshopServices: [],
   repairShop: {},
 }
@@ -82,38 +81,16 @@ const useInitialState = () => {
 
       await loginUser({ email: payload.email, password: payload.password })
     } catch (e) {
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         error: e.response.data.error,
-      })
+      }))
     }
   }
 
   const logoutUser = () => {
     console.log('logout')
     setState((prevState) => ({ ...prevState, ...initialState }))
-  }
-
-  const createRepairShop = async (payload) => {
-    try {
-      console.log('create repair')
-      const response = await customAxios.post('/api/repairshops', {
-        ...payload,
-      })
-
-      await loginUser({ email: payload.email, password: payload.password })
-      setState((prevState) => ({
-        ...prevState,
-        userRepairShop: {
-          ...response.data,
-        },
-      }))
-    } catch (e) {
-      setState({
-        ...state,
-        error: e.response.data.error,
-      })
-    }
   }
 
   const listRepairShops = async (page) => {
@@ -137,10 +114,10 @@ const useInitialState = () => {
         }))
       }
     } catch (e) {
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         error: e.response.data.error,
-      })
+      }))
     }
   }
 
@@ -176,10 +153,46 @@ const useInitialState = () => {
         payed: true,
       }))
     } catch (e) {
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         error: e.response.data.error,
-      })
+      }))
+    }
+  }
+
+  const createRepairShop = async (payload) => {
+    try {
+      console.log('create repair')
+      const formData = new FormData()
+      formData.append('name', payload.name)
+      formData.append('address', payload.address)
+      formData.append('accountNumber', payload.bankAccount)
+      formData.append('latitude', payload.latitude)
+      formData.append('longitude', payload.longitude)
+      formData.append('services', JSON.stringify(payload.services))
+      formData.append('bank', 'Bancolombia')
+      formData.append('userId', state.user._id)
+      if (payload.imageUrl) {
+        formData.append('image', {
+          uri: payload.imageUrl,
+          name: payload.imageUrl.split('/').pop(),
+          type: `image/${payload.imageUrl.split('.').pop()}`,
+        })
+      }
+
+      const response = await customAxios.post('/api/repairshops', formData)
+
+      setState((prevState) => ({
+        ...prevState,
+        repairShop: {
+          ...response.data,
+        },
+      }))
+    } catch (e) {
+      setState((prevState) => ({
+        ...prevState,
+        error: e.response.data.error,
+      }))
     }
   }
 
@@ -209,10 +222,10 @@ const useInitialState = () => {
         },
       }))
     } catch (e) {
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         error: e.response.data.error,
-      })
+      }))
     }
   }
 
@@ -244,10 +257,10 @@ const useInitialState = () => {
         repairShopsInfo: response.data,
       }))
     } catch (e) {
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         error: e.response.data.error,
-      })
+      }))
     }
   }
 
@@ -257,7 +270,7 @@ const useInitialState = () => {
       const response = await customAxios.get('/api/services')
       setState((prevState) => ({
         ...prevState,
-        availableServices: response.data,
+        availableServices: response.data.services,
       }))
     } catch (e) {
       setState((prevState) => ({
@@ -278,16 +291,17 @@ const useInitialState = () => {
         repairshopServices: response.data,
       }))
     } catch (e) {
-      setState({
-        ...state,
+      setState((prevState) => ({
+        ...prevState,
         error: e.response.data.error,
-      })
+      }))
     }
   }
 
   const getRepairShop = async (payload) => {
     try {
-      const response = await customAxios.get(`/api/repairshops/${payload}`)
+      console.log('get repair shop')
+      const response = await customAxios.get(`/api/repairshops/info/${payload}`)
       setState((prevState) => ({
         ...prevState,
         repairShop: response.data,

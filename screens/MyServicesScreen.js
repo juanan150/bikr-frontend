@@ -33,7 +33,7 @@ const myServices = ({ navigation }) => {
   const isVisible = useIsFocused()
 
   useEffect(() => {
-    getServices(state.user._id)
+    isVisible && getServices(state.user._id)
   }, [isVisible])
 
   useEffect(() => {

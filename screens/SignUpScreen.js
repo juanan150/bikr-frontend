@@ -5,6 +5,7 @@ import DropDownPicker from 'react-native-dropdown-picker'
 import PropTypes from 'prop-types'
 import { Feather } from '@expo/vector-icons'
 import { MaterialIcons } from '@expo/vector-icons'
+import { useIsFocused } from '@react-navigation/native'
 
 import AppContext from '../context/AppContext'
 import validateReg from '../components/forms/validateReg'
@@ -95,13 +96,15 @@ const SignUpScreen = ({ navigation }) => {
   const [errMsg, setErrMsg] = useState({})
   const [open, setOpen] = useState(false)
 
+  const isVisible = useIsFocused()
+
   useEffect(() => {
     resetError()
   }, [])
 
   useEffect(() => {
     setError(state.error)
-    if (!state.error && state.user) {
+    if (!state.error && state.user && isVisible) {
       if (state.user.role === 'user') {
         navigation.navigate('Home')
       } else {

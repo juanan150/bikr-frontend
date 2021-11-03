@@ -1,5 +1,14 @@
+/* eslint-disable react/jsx-curly-newline */
+/* eslint-disable implicit-arrow-linebreak */
 import React, { useState, useEffect, useContext } from 'react'
-import { View, StyleSheet, ScrollView, Text, TextInput } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  Text,
+  TextInput,
+  CheckBox,
+} from 'react-native'
 import PropTypes from 'prop-types'
 import MapView, { Marker } from 'react-native-maps'
 import { MaterialIcons, Entypo, FontAwesome } from '@expo/vector-icons'
@@ -72,6 +81,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  serviceInput: {
+    height: 40,
+    padding: 5,
+    paddingLeft: 10,
+    width: 150,
+    color: '#1c1919',
+    backgroundColor: '#EBEBEC',
+    borderBottomRightRadius: 5,
+    borderTopRightRadius: 5,
+    fontSize: 18,
+  },
+  serviceItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  checkboxContainer: {
+    display: 'flex',
+    width: 120,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
   error: {
     color: 'red',
     fontSize: 18,
@@ -81,9 +115,13 @@ const styles = StyleSheet.create({
 })
 
 const CreateRepairShopScreen = ({ navigation }) => {
-  const { createRepairShop, listServices, resetError } = useContext(AppContext)
-  const [form, setForm] = useState(null)
+  const { state, createRepairShop, listServices, resetError } =
+    useContext(AppContext)
+  const [form, setForm] = useState({
+    services: [],
+  })
   const [errMsg, setErrMsg] = useState({})
+  const [services, setServices] = useState({})
   const isVisible = useIsFocused()
 
   const handleUpdateImage = (imageUrl) => {
@@ -114,12 +152,67 @@ const CreateRepairShopScreen = ({ navigation }) => {
     }
   }
 
+  const handleCheckboxChange = (service) => {
+    const newServices = [...form.services]
+    const index = newServices.findIndex(
+      (s) => s.serviceName === service.serviceName,
+    )
+    if (index === -1) {
+      newServices.push({
+        serviceName: service?.serviceName,
+        serviceDetails: service?.serviceDetails,
+        price: services?.[service?._id]?.price || 0,
+      })
+      setServices({
+        ...services,
+        [service._id]: {
+          price: services?.[service?._id]?.price || 0,
+          checked: true,
+        },
+      })
+    } else {
+      newServices.splice(index, 1)
+      setServices({
+        ...services,
+        [service._id]: {
+          price: services?.[service?._id]?.price || 0,
+          checked: false,
+        },
+      })
+    }
+    setForm({ ...form, services: newServices })
+  }
+
+  const handleChangePriceText = (service, text) => {
+    const newServices = [...form.services]
+    const index = newServices.findIndex(
+      (s) => s.serviceName === service.serviceName,
+    )
+    if (index !== -1) {
+      newServices[index].price = text
+    }
+    setForm({ ...form, services: newServices })
+    setServices({
+      ...services,
+      [service._id]: {
+        price: text,
+        checked: services?.[service?._id]?.checked,
+      },
+    })
+  }
+
   useEffect(() => {
     if (isVisible) {
-      // resetError()
+      resetError()
       listServices()
     }
   }, [])
+
+  useEffect(() => {
+    if (!state.error && Object.keys(state.repairShop).length) {
+      navigation.navigate('Home')
+    }
+  }, [state])
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -145,7 +238,9 @@ const CreateRepairShopScreen = ({ navigation }) => {
             placeholder="Enter the repair shop name"
           />
         </View>
-        {errMsg.bankName && <Text style={styles.error}>{errMsg.bankName}</Text>}
+        {errMsg.bankAccount && (
+          <Text style={styles.error}>{errMsg.bankAccount}</Text>
+        )}
         <View style={styles.inputContainer}>
           <View style={styles.iconContainer}>
             <FontAwesome name="bank" size={24} color="grey" />
@@ -192,6 +287,28 @@ const CreateRepairShopScreen = ({ navigation }) => {
         <Text style={styles.serviceTitle}>
           Select the services you will provide
         </Text>
+        {errMsg.services && <Text style={styles.error}>{errMsg.services}</Text>}
+        {state?.availableServices?.length > 0 &&
+          state?.availableServices?.map((service) => (
+            <View style={styles.serviceItem} key={service._id}>
+              <View style={styles.checkboxContainer}>
+                <Text>{service.serviceDetails}</Text>
+                <CheckBox
+                  key={service.id}
+                  title={service.name}
+                  value={services?.[service._id]?.checked}
+                  onValueChange={() => handleCheckboxChange(service)}
+                />
+              </View>
+              <TextInput
+                autoCapitalize="none"
+                style={styles.serviceInput}
+                placeholder="Service price"
+                keyboardType="numeric"
+                onChangeText={(text) => handleChangePriceText(service, text)}
+              />
+            </View>
+          ))}
       </View>
 
       <SubmitButton handleSubmit={handleSubmit}>
