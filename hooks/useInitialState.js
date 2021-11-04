@@ -39,6 +39,7 @@ const useInitialState = () => {
           name: response.data.name,
           role: response.data.role,
           imageUrl: response.data.imageUrl,
+          phoneNumber: response.data.phoneNumber,
         },
         error: null,
       }))
@@ -64,6 +65,7 @@ const useInitialState = () => {
           name: response.data.name,
           role: response.data.role,
           imageUrl: response.data.imageUrl,
+          phoneNumber: response.data.phoneNumber,
         },
         error: null,
       }))
@@ -207,7 +209,9 @@ const useInitialState = () => {
     try {
       console.log('update prof')
       const formData = new FormData()
-      formData.append('name', payload.name)
+      payload.name
+        ? formData.append('name', payload.name)
+        : formData.append('phoneNumber', payload.phoneNumber)
       formData.append('_id', state.user._id)
       if (payload.uri) {
         formData.append('image', {

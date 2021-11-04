@@ -1,5 +1,7 @@
 import React, { useContext } from 'react'
 import { View, StyleSheet, TextInput, Text } from 'react-native'
+import { Feather } from '@expo/vector-icons'
+
 import AppContext from '../context/AppContext'
 import ImageComp from '../components/ImageComp'
 
@@ -23,14 +25,54 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: 'grey',
   },
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  iconContainer: {
+    height: 60,
+    width: 40,
+    marginBottom: 12,
+    justifyContent: 'center',
+    paddingLeft: 10,
+    backgroundColor: '#EBEBEC',
+    borderBottomLeftRadius: 5,
+    borderTopLeftRadius: 5,
+  },
+  input: {
+    height: 60,
+    marginBottom: 12,
+    padding: 12,
+    paddingLeft: 10,
+    width: 210,
+    color: '#1c1919',
+    backgroundColor: '#EBEBEC',
+    borderBottomRightRadius: 5,
+    borderTopRightRadius: 5,
+    fontSize: 16,
+  },
+  text: {
+    color: 'grey',
+    padding: 18,
+  },
 })
 
 const ProfileScreen = () => {
   const { state, updateProfile } = useContext(AppContext)
-  const [form, setForm] = React.useState({ name: state?.user?.name })
+  const [form, setForm] = React.useState({
+    name: state?.user?.name,
+    phoneNumber: state?.user?.phoneNumber,
+  })
 
   const handleUpdateImage = (imageUrl) => {
-    updateProfile({ uri: imageUrl, name: state?.user?.name })
+    updateProfile({
+      uri: imageUrl,
+      name: state?.user?.name,
+      phoneNumber: state?.user?.phoneNumber,
+    })
   }
 
   const handleChangeText = (field, text) => {
@@ -40,8 +82,8 @@ const ProfileScreen = () => {
     })
   }
 
-  const updateName = () => {
-    updateProfile({ name: form.name })
+  const updateName = (key) => {
+    updateProfile({ [key]: form[key] })
   }
 
   return (
@@ -52,13 +94,32 @@ const ProfileScreen = () => {
       />
       <TextInput
         style={styles.title}
-        onBlur={updateName}
+        onBlur={() => updateName('name')}
         onChangeText={(text) => handleChangeText('name', text)}
       >
         {state?.user?.name}
       </TextInput>
       <Text>Tap your name to edit</Text>
-      <Text style={styles.email}>{state?.user?.email}</Text>
+      <View style={styles.inputContainer}>
+        <View style={styles.iconContainer}>
+          <Feather name="phone" size={24} color="grey" />
+        </View>
+        <TextInput
+          autoCapitalize="none"
+          style={styles.input}
+          onChangeText={(text) => handleChangeText('phoneNumber', text)}
+          placeholder="Enter your phone number"
+          onBlur={() => updateName('phoneNumber')}
+          value={form.phoneNumber}
+          keyboardType="number-pad"
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <View style={styles.iconContainer}>
+          <Feather name="mail" size={24} color="grey" />
+        </View>
+        <Text style={[styles.input, styles.text]}>{state?.user?.email}</Text>
+      </View>
     </View>
   )
 }
