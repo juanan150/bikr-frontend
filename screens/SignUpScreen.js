@@ -1,10 +1,8 @@
-/* eslint-disable import/no-duplicates */
 import React, { useState, useContext, useEffect } from 'react'
 import { Text, StyleSheet, TextInput, View } from 'react-native'
 import DropDownPicker from 'react-native-dropdown-picker'
 import PropTypes from 'prop-types'
-import { Feather } from '@expo/vector-icons'
-import { MaterialIcons } from '@expo/vector-icons'
+import { Feather, MaterialIcons } from '@expo/vector-icons'
 import { useIsFocused } from '@react-navigation/native'
 
 import AppContext from '../context/AppContext'
@@ -196,6 +194,20 @@ const SignUpScreen = ({ navigation }) => {
             style={styles.input}
             onChangeText={(text) => handleChangeText('name', text)}
             placeholder="Enter your full name"
+          />
+        </View>
+        {errMsg.phoneNumber && (
+          <Text style={styles.error}>{errMsg.phoneNumber}</Text>
+        )}
+        <View style={styles.inputContainer}>
+          <View style={styles.iconContainer}>
+            <Feather name="phone" size={24} color="grey" />
+          </View>
+          <TextInput
+            autoCapitalize="none"
+            style={styles.input}
+            onChangeText={(text) => handleChangeText('phoneNumber', text)}
+            placeholder="Enter your phone number"
           />
         </View>
         {errMsg.role && <Text style={styles.error}>{errMsg.role}</Text>}

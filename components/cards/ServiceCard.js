@@ -72,7 +72,15 @@ const styles = StyleSheet.create({
 })
 
 const ServiceCard = (props) => {
-  const { imageUrl, name, address, service, scheduleDate, repairCard } = props
+  const {
+    imageUrl,
+    name,
+    address,
+    service,
+    scheduleDate,
+    repairCard,
+    phoneNumber,
+  } = props
 
   const goToRepairShop = () => {
     if (repairCard) {
@@ -104,11 +112,13 @@ const ServiceCard = (props) => {
             .utc()
             .format('DD/MM/YYYY')}
         </Text>
-        {!repairCard && (
+        {!repairCard ? (
           <View style={styles.schedule}>
             <Text style={styles.scheduleText}>See On Map</Text>
             <Feather name="arrow-right" size={22} color="#f2771a" />
           </View>
+        ) : (
+          <Text style={styles.date}>Phone: {phoneNumber}</Text>
         )}
       </View>
     </TouchableOpacity>
@@ -128,11 +138,13 @@ ServiceCard.propTypes = {
     serviceDetails: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
   }).isRequired,
+  phoneNumber: PropTypes.string,
   repairCard: PropTypes.bool,
 }
 ServiceCard.defaultProps = {
   address: '',
   repairCard: false,
+  phoneNumber: '',
 }
 
 export default ServiceCard

@@ -14,5 +14,7 @@ export default function validateReg(values) {
 
   !values?.role && (errors.role = 'Role is required')
 
+  !values?.phoneNumber && (errors.phoneNumber = 'Phone Number is required')
+
   return errors
 }
