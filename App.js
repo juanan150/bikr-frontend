@@ -16,12 +16,14 @@ import RepairShopScreen from './screens/RepairShopScreen'
 import PaymentScreen from './screens/PaymentScreen'
 import MyServicesScreen from './screens/MyServicesScreen'
 import CreateRepairShopScreen from './screens/CreateRepairShopScreen'
+import MapScreen from './screens/MapScreen'
 
 const icons = {
   SearchesStack: 'tools',
   ProfilesStack: 'user',
   ServicesStack: 'list-alt',
   RepairStack: 'list-alt',
+  MapStack: 'map',
 }
 
 const Stack = createNativeStackNavigator()
@@ -92,6 +94,20 @@ ServicesStack.propTypes = {
   }).isRequired,
 }
 
+function MapStack() {
+  return (
+    <SearchStack.Navigator>
+      <SearchStack.Screen name="Map" component={MapScreen} />
+    </SearchStack.Navigator>
+  )
+}
+
+ServicesStack.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+}
+
 function ProfilesStack({ navigation }) {
   return (
     <profileStack.Navigator>
@@ -134,14 +150,24 @@ function LandingScreen() {
         component={SearchesStack}
       />
       {state?.user?.role === 'user' ? (
-        <Tab.Screen
-          name="ServicesStack"
-          options={{
-            title: 'My Services',
-            headerShown: false,
-          }}
-          component={ServicesStack}
-        />
+        <>
+          <Tab.Screen
+            name="ServicesStack"
+            options={{
+              title: 'My Services',
+              headerShown: false,
+            }}
+            component={ServicesStack}
+          />
+          <Tab.Screen
+            name="MapStack"
+            options={{
+              title: 'Map',
+              headerShown: false,
+            }}
+            component={MapStack}
+          />
+        </>
       ) : (
         <Tab.Screen
           name="RepairStack"
