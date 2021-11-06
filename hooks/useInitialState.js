@@ -77,9 +77,29 @@ const useInitialState = () => {
   const signUpUser = async (payload) => {
     try {
       console.log('signup')
-      await customAxios.post('/api/users/signup', {
+      const user = await customAxios.post('/api/users/signup', {
         ...payload,
       })
+
+      setState((prevState) => ({
+        ...prevState,
+        user: {
+          ...user,
+        },
+        error: null,
+      }))
+    } catch (e) {
+      setState((prevState) => ({
+        ...prevState,
+        error: e.response.data.error,
+      }))
+    }
+  }
+
+  const verifyEmail = async (payload) => {
+    try {
+      console.log('verify email')
+      await customAxios.post(`/api/users/verify/${payload.token}`)
 
       await loginUser({ email: payload.email, password: payload.password })
     } catch (e) {
@@ -89,7 +109,6 @@ const useInitialState = () => {
       }))
     }
   }
-
   const logoutUser = () => {
     console.log('logout')
     setState((prevState) => ({ ...prevState, ...initialState }))
@@ -371,6 +390,7 @@ const useInitialState = () => {
     getRepairShopServices,
     searchRepairShopServices,
     getRepairShop,
+    verifyEmail,
   }
 }
 

@@ -120,7 +120,7 @@ const CreateRepairShopScreen = ({ navigation, route }) => {
   const { state, createRepairShop, listServices, resetError } =
     useContext(AppContext)
   const create = route?.params || false
-  const [form, setForm] = useState(state.repairShop)
+  const [form, setForm] = useState(state?.repairShop || {})
   const [errMsg, setErrMsg] = useState({})
   const [services, setServices] = useState({})
   const [submitted, setSubmitted] = useState(false)
@@ -158,10 +158,16 @@ const CreateRepairShopScreen = ({ navigation, route }) => {
   }
 
   const handleCheckboxChange = (service) => {
-    const newServices = [...form.services]
-    const index = newServices.findIndex(
-      (s) => s.serviceName === service.serviceName,
-    )
+    console.log(form)
+    const newServices = form.services ? [...form?.services] : []
+    console.log(1, newServices)
+    let index = -1
+    if (newServices.length > 0) {
+      index = newServices.findIndex(
+        (s) => s.serviceName === service.serviceName,
+      )
+    }
+    console.log(2, index)
     if (index === -1) {
       newServices.push({
         serviceName: service?.serviceName,
@@ -185,6 +191,7 @@ const CreateRepairShopScreen = ({ navigation, route }) => {
         },
       })
     }
+    console.log(3, newServices)
     setForm({ ...form, services: newServices })
   }
 
@@ -207,19 +214,23 @@ const CreateRepairShopScreen = ({ navigation, route }) => {
   }
 
   const populateServices = () => {
-    if (Object.keys(state.repairShop).length) {
-      state.repairShop.services.forEach((service) => {
-        state.availableServices.forEach((s) => {
-          s.serviceName === service.serviceName &&
-            setServices((prevState) => ({
-              ...prevState,
-              [s._id]: {
-                price: service.price,
-                checked: true,
-              },
-            }))
+    console.log(state.repairShop)
+    if (state.repairShop?.services) {
+      console.log(state.repairShop)
+      if (Object.keys(state.repairShop).length) {
+        state.repairShop.services.forEach((service) => {
+          state.availableServices.forEach((s) => {
+            s.serviceName === service.serviceName &&
+              setServices((prevState) => ({
+                ...prevState,
+                [s._id]: {
+                  price: service.price,
+                  checked: true,
+                },
+              }))
+          })
         })
-      })
+      }
     }
   }
 
@@ -233,16 +244,18 @@ const CreateRepairShopScreen = ({ navigation, route }) => {
   }, [])
 
   useEffect(() => {
-    if (
-      !state.error &&
-      Object.keys(state.repairShop).length &&
-      submitted &&
-      isVisible
-    ) {
-      if (create) {
-        navigation.navigate('Home')
-      } else {
-        Alert.alert('Reapir Shop updates succesfully')
+    if (state.repairShop) {
+      if (
+        !state.error &&
+        Object.keys(state.repairShop).length &&
+        submitted &&
+        isVisible
+      ) {
+        if (create) {
+          navigation.navigate('Home')
+        } else {
+          Alert.alert('Repair Shop updates succesfully')
+        }
       }
     }
   }, [state])
@@ -338,7 +351,7 @@ const CreateRepairShopScreen = ({ navigation, route }) => {
                 <CheckBox
                   key={service.id}
                   title={service.name}
-                  value={services?.[service._id]?.checked}
+                  value={!!services?.[service._id]?.checked}
                   onValueChange={() => handleCheckboxChange(service)}
                 />
               </View>

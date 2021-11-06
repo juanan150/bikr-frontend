@@ -103,11 +103,10 @@ const SignUpScreen = ({ navigation }) => {
   useEffect(() => {
     setError(state.error)
     if (!state.error && state.user && isVisible) {
-      if (state.user.role === 'user') {
-        navigation.navigate('Home')
-      } else {
-        navigation.navigate('CreateRepairShop', { create: true })
-      }
+      navigation.navigate('VerifyEmail', {
+        email: form.email,
+        password: form.password,
+      })
     }
   }, [state])
 
@@ -208,6 +207,7 @@ const SignUpScreen = ({ navigation }) => {
             style={styles.input}
             onChangeText={(text) => handleChangeText('phoneNumber', text)}
             placeholder="Enter your phone number"
+            keyboardType="phone-pad"
           />
         </View>
         {errMsg.role && <Text style={styles.error}>{errMsg.role}</Text>}

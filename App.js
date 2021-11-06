@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { FontAwesome5 } from '@expo/vector-icons'
 import PropTypes from 'prop-types'
+import Onboarding from 'react-native-onboarding-swiper'
 
 import AppContext from './context/AppContext'
 import LoginScreen from './screens/LoginScreen'
@@ -17,6 +18,7 @@ import PaymentScreen from './screens/PaymentScreen'
 import MyServicesScreen from './screens/MyServicesScreen'
 import CreateRepairShopScreen from './screens/CreateRepairShopScreen'
 import MapScreen from './screens/MapScreen'
+import VerifyEmailScreen from './screens/VerifyEmailScreen'
 
 const icons = {
   SearchesStack: 'tools',
@@ -196,12 +198,74 @@ LandingScreen.propTypes = {
   }).isRequired,
 }
 
+function onBoardingScreen({ navigation }) {
+  return (
+    <Onboarding
+      onDone={() => {
+        navigation.navigate('Login')
+      }}
+      pages={[
+        {
+          backgroundColor: '#f2771a',
+          image: (
+            <FontAwesome5
+              name="tools"
+              size={200}
+              color="green"
+              style={{ marginTop: -100 }}
+            />
+          ),
+          title: 'Services',
+          subtitle: 'Find services near you',
+        },
+        {
+          backgroundColor: '#f2771a',
+          image: (
+            <FontAwesome5
+              name="user"
+              size={200}
+              color="green"
+              style={{ marginTop: -100 }}
+            />
+          ),
+          title: 'Profile',
+          subtitle: 'Manage your profile',
+        },
+        {
+          backgroundColor: '#f2771a',
+          image: (
+            <FontAwesome5
+              name="list-alt"
+              size={200}
+              color="green"
+              style={{ marginTop: -100 }}
+            />
+          ),
+          title: 'My Services',
+          subtitle: 'Manage your services',
+        },
+      ]}
+    />
+  )
+}
+
+onBoardingScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+}
+
 export default function App() {
   const initialState = useInitialState()
   return (
     <AppContext.Provider value={initialState}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Onboarding"
+            options={{ headerShown: false }}
+            component={onBoardingScreen}
+          />
           <Stack.Screen
             name="Login"
             options={{ headerShown: false }}
@@ -225,6 +289,15 @@ export default function App() {
             component={CreateRepairShopScreen}
             options={{
               title: 'Create Repair Shop',
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="VerifyEmail"
+            component={VerifyEmailScreen}
+            options={{
+              title: 'Verify Email Shop',
               headerShown: false,
             }}
           />
