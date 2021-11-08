@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
+import { Image } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { FontAwesome5 } from '@expo/vector-icons'
@@ -19,6 +20,9 @@ import MyServicesScreen from './screens/MyServicesScreen'
 import CreateRepairShopScreen from './screens/CreateRepairShopScreen'
 import MapScreen from './screens/MapScreen'
 import VerifyEmailScreen from './screens/VerifyEmailScreen'
+import onboarding1 from './assets/onboarding1.png'
+import onboarding2 from './assets/onboarding2.png'
+import onboarding3 from './assets/onboarding3.png'
 
 const icons = {
   SearchesStack: 'tools',
@@ -207,42 +211,21 @@ function onBoardingScreen({ navigation }) {
       pages={[
         {
           backgroundColor: '#f2771a',
-          image: (
-            <FontAwesome5
-              name="tools"
-              size={200}
-              color="green"
-              style={{ marginTop: -100 }}
-            />
-          ),
+          image: <Image source={onboarding1} />,
+          title: 'Repair Shops',
+          subtitle: 'Find repair shops near you',
+        },
+        {
+          backgroundColor: '#f2771a',
+          image: <Image source={onboarding2} />,
           title: 'Services',
-          subtitle: 'Find services near you',
+          subtitle: 'Schedule services on the date you prefer',
         },
         {
           backgroundColor: '#f2771a',
-          image: (
-            <FontAwesome5
-              name="user"
-              size={200}
-              color="green"
-              style={{ marginTop: -100 }}
-            />
-          ),
-          title: 'Profile',
-          subtitle: 'Manage your profile',
-        },
-        {
-          backgroundColor: '#f2771a',
-          image: (
-            <FontAwesome5
-              name="list-alt"
-              size={200}
-              color="green"
-              style={{ marginTop: -100 }}
-            />
-          ),
-          title: 'My Services',
-          subtitle: 'Manage your services',
+          image: <Image source={onboarding3} />,
+          title: 'My services',
+          subtitle: 'Manage your scheduled services',
         },
       ]}
     />

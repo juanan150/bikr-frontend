@@ -130,7 +130,9 @@ const LoginForm = ({ navigation }) => {
   return (
     <View>
       <Text style={styles.text}>Login Now</Text>
-      <Text style={styles.span}>Please enter the details below to cotinue</Text>
+      <Text style={styles.span}>
+        Please enter the details below to continue
+      </Text>
       <View style={styles.inputContainer}>
         <View style={styles.iconContainer}>
           <Feather name="mail" size={24} color="grey" />
