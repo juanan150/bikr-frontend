@@ -1,7 +1,8 @@
-import React, { useContext } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import React, { useContext, useEffect } from 'react'
+import { View, Text, StyleSheet, Alert } from 'react-native'
 import MapView, { Marker, Callout } from 'react-native-maps'
 import { PropTypes } from 'prop-types'
+import * as Location from 'expo-location'
 import AppContext from '../context/AppContext'
 
 const styles = StyleSheet.create({
@@ -32,6 +33,20 @@ const MapScreen = ({ navigation }) => {
       schedule: true,
     })
   }
+
+  useEffect(() => {
+    const getLocation = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync()
+      if (status !== 'granted') {
+        Alert.alert('Permission to access location was denied')
+        return
+      }
+
+      const location = await Location.getCurrentPositionAsync({})
+      console.log(location)
+    }
+    getLocation()
+  }, [])
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>All Repair Shops</Text>
