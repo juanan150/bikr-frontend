@@ -149,6 +149,7 @@ const useInitialState = () => {
       repairShopId: payload.repairShopId,
       service: payload.serviceName,
       scheduleDate: new Date(payload.scheduleDate).getTime(),
+      value: payload.servicePrice,
       status: 'pending',
     })
     setState((prevState) => ({
@@ -168,14 +169,12 @@ const useInitialState = () => {
         expYear: payload.expYear,
         expMonth: payload.expMonth,
         cvc: payload.cvc,
-        value: payload.amount,
+        value: state.serviceInfo.servicePrice,
         customerId: state.user._id,
-        service: state.serviceInfo.serviceName,
-        repairShopId: state.serviceInfo.repairShopId,
         dues: 1,
-        scheduleDate: state.serviceInfo.scheduleDate,
+        serviceId: state.serviceInfo.serviceId,
       }
-      await customAxios.post('/api/transactions', data)
+      await customAxios.put('/api/transactions/service', data)
       setState((prevState) => ({
         ...prevState,
         payed: true,
@@ -391,6 +390,18 @@ const useInitialState = () => {
     }
   }
 
+  const setService = (payload) => {
+    setState((prevState) => ({
+      ...prevState,
+      serviceInfo: {
+        servicePrice: payload.service.price,
+        serviceDetails: payload.service.serviceDetails,
+        repairShopName: payload.name,
+        serviceId: payload.serviceId,
+      },
+    }))
+  }
+
   const resetError = () => {
     console.log('reset err')
     setState((prevState) => ({
@@ -420,6 +431,7 @@ const useInitialState = () => {
     getRepairShop,
     verifyEmail,
     updateService,
+    setService,
   }
 }
 

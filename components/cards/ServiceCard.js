@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import React, { useEffect } from 'react'
+import React, { useContext } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { PropTypes } from 'prop-types'
 import { Feather } from '@expo/vector-icons'
 import moment from 'moment'
+import AppContext from '../../context/AppContext'
 
 const styles = StyleSheet.create({
   item: {
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
 })
 
 const ServiceCard = (props) => {
+  const { setService } = useContext(AppContext)
   const {
     imageUrl,
     name,
@@ -117,6 +119,12 @@ const ServiceCard = (props) => {
       repairShop,
       schedule: false,
     })
+  }
+
+  const handlePay = () => {
+    const { router } = props
+    setService({ name, service, scheduleDate, serviceId })
+    router.navigate('Payment')
   }
 
   if (status === 'rejected') {
@@ -147,9 +155,7 @@ const ServiceCard = (props) => {
         <Text style={[styles.date, styles[statusColor]]}>{status}</Text>
         {!repairCard ? (
           <View style={styles.schedule}>
-            <Text style={styles.scheduleText}>
-              {status === 'approved' ? 'Go to pay' : 'See On Map'}
-            </Text>
+            <Text style={styles.scheduleText}>See On Map</Text>
             <Feather name="arrow-right" size={22} color="#f2771a" />
           </View>
         ) : (
@@ -168,6 +174,13 @@ const ServiceCard = (props) => {
               onPress={() => handleService('rejected', serviceId)}
             >
               <Text style={styles.listItem}>Reject</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        {status === 'approved' && !repairCard && (
+          <View style={styles.buttons}>
+            <TouchableOpacity style={styles.button} onPress={handlePay}>
+              <Text style={styles.listItem}>Pay</Text>
             </TouchableOpacity>
           </View>
         )}

@@ -55,13 +55,6 @@ function SearchesStack({ navigation }) {
         }}
         component={RepairShopScreen}
       />
-      <SearchStack.Screen
-        name="Payment"
-        options={{
-          title: 'Payment',
-        }}
-        component={PaymentScreen}
-      />
     </SearchStack.Navigator>
   )
 }
@@ -90,6 +83,13 @@ function ServicesStack({ navigation }) {
         }}
         component={RepairShopScreen}
       />
+      <ServiceStack.Screen
+        name="Payment"
+        options={{
+          title: 'Payment',
+        }}
+        component={PaymentScreen}
+      />
     </ServiceStack.Navigator>
   )
 }
@@ -106,12 +106,6 @@ function MapStack() {
       <SearchStack.Screen name="Map" component={MapScreen} />
     </SearchStack.Navigator>
   )
-}
-
-ServicesStack.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
 }
 
 function ProfilesStack({ navigation }) {

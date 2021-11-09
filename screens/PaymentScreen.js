@@ -135,8 +135,8 @@ const PaymentScreen = ({ navigation }) => {
   const handleConfirm = () => {
     Alert.alert('Payment Done!', 'Thank you for your payment', [
       {
-        text: 'Back to Home',
-        onPress: () => navigation.navigate('Services'),
+        text: 'Back to My Services',
+        onPress: () => navigation.navigate('MyServicesScreen'),
       },
     ])
   }
