@@ -142,8 +142,15 @@ const useInitialState = () => {
     }
   }
 
-  const requestService = (payload) => {
+  const requestService = async (payload) => {
     console.log('request ser')
+    await customAxios.post('/api/transactions', {
+      userId: state.user._id,
+      repairShopId: payload.repairShopId,
+      service: payload.serviceName,
+      scheduleDate: new Date(payload.scheduleDate).getTime(),
+      status: 'pending',
+    })
     setState((prevState) => ({
       ...prevState,
       serviceInfo: {

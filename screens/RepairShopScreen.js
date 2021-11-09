@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   Platform,
   TextInput,
+  Alert,
 } from 'react-native'
 import PropTypes from 'prop-types'
 import MapView, { Marker } from 'react-native-maps'
@@ -148,7 +149,16 @@ const RepairShopScreen = ({ route, navigation }) => {
     !state.error &&
       state.user &&
       serviceReq.done &&
-      navigation.navigate('Payment')
+      Alert.alert(
+        'Thank you for scheduling a service!',
+        'You can pay as soon as the repair shop approves the service',
+        [
+          {
+            text: 'Back to Home',
+            onPress: () => navigation.navigate('Services'),
+          },
+        ],
+      )
   }, [state])
 
   useEffect(() => {
