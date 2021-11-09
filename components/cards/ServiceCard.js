@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import { PropTypes } from 'prop-types'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { PropTypes } from 'prop-types'
 import { Feather } from '@expo/vector-icons'
 import moment from 'moment'
 
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   image: {
-    height: 170,
+    minHeight: '100%',
     width: 150,
     borderRadius: 20,
   },
@@ -69,6 +69,28 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 16,
   },
+  red: {
+    color: 'red',
+  },
+  green: {
+    color: 'green',
+  },
+  black: {
+    color: '#1c1919',
+  },
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  button: {
+    padding: 10,
+    width: 80,
+    alignItems: 'center',
+    borderRadius: 5,
+    backgroundColor: '#f2771a',
+  },
 })
 
 const ServiceCard = (props) => {
@@ -80,7 +102,11 @@ const ServiceCard = (props) => {
     scheduleDate,
     repairCard,
     phoneNumber,
+    status,
+    handleService,
+    serviceId,
   } = props
+  let statusColor = 'black'
 
   const goToRepairShop = () => {
     if (repairCard) {
@@ -93,6 +119,12 @@ const ServiceCard = (props) => {
     })
   }
 
+  if (status === 'rejected') {
+    statusColor = 'red'
+  } else if (status === 'approved') {
+    statusColor = 'green'
+  }
+
   return (
     <TouchableOpacity style={styles.item} onPress={goToRepairShop}>
       <View>
@@ -100,7 +132,7 @@ const ServiceCard = (props) => {
       </View>
       <View style={styles.infoContainer}>
         <Text style={styles.title}>{name}</Text>
-        <Text style={styles.address}>{address}</Text>
+        {!repairCard && <Text style={styles.address}>{address}</Text>}
         <View style={styles.listContainer}>
           <Text style={styles.listItem}>
             {service.serviceDetails}: ${service.price}
@@ -112,13 +144,32 @@ const ServiceCard = (props) => {
             .utc()
             .format('DD/MM/YYYY')}
         </Text>
+        <Text style={[styles.date, styles[statusColor]]}>{status}</Text>
         {!repairCard ? (
           <View style={styles.schedule}>
-            <Text style={styles.scheduleText}>See On Map</Text>
+            <Text style={styles.scheduleText}>
+              {status === 'approved' ? 'Go to pay' : 'See On Map'}
+            </Text>
             <Feather name="arrow-right" size={22} color="#f2771a" />
           </View>
         ) : (
           <Text style={styles.date}>Phone: {phoneNumber}</Text>
+        )}
+        {status === 'pending' && repairCard && (
+          <View style={styles.buttons}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => handleService('approved', serviceId)}
+            >
+              <Text style={styles.listItem}>Approve</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => handleService('rejected', serviceId)}
+            >
+              <Text style={styles.listItem}>Reject</Text>
+            </TouchableOpacity>
+          </View>
         )}
       </View>
     </TouchableOpacity>
@@ -140,11 +191,15 @@ ServiceCard.propTypes = {
   }).isRequired,
   phoneNumber: PropTypes.string,
   repairCard: PropTypes.bool,
+  status: PropTypes.string.isRequired,
+  handleService: PropTypes.func,
+  serviceId: PropTypes.string.isRequired,
 }
 ServiceCard.defaultProps = {
   address: '',
   repairCard: false,
   phoneNumber: '',
+  handleService: () => {},
 }
 
 export default ServiceCard

@@ -370,6 +370,27 @@ const useInitialState = () => {
     }
   }
 
+  const updateService = async (payload) => {
+    try {
+      console.log('update serv')
+      await customAxios.put('/api/transactions', payload)
+      setState((prevState) => ({
+        ...prevState,
+        repairshopServices: prevState.repairshopServices.map((service) => {
+          if (service.serviceId === payload.serviceId) {
+            return { ...service, status: payload.status }
+          }
+          return service
+        }),
+      }))
+    } catch (e) {
+      setState((prevState) => ({
+        ...prevState,
+        error: e.response.data.error,
+      }))
+    }
+  }
+
   const resetError = () => {
     console.log('reset err')
     setState((prevState) => ({
@@ -398,6 +419,7 @@ const useInitialState = () => {
     searchRepairShopServices,
     getRepairShop,
     verifyEmail,
+    updateService,
   }
 }
 

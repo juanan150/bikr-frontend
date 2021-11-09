@@ -69,6 +69,7 @@ const OwnerHome = ({ navigation }) => {
     searchRepairShopServices,
     getRepairShopServices,
     getRepairShop,
+    updateService,
   } = useContext(AppContext)
   const [services, setServices] = React.useState([])
   const [error, setError] = useState(null)
@@ -96,6 +97,10 @@ const OwnerHome = ({ navigation }) => {
     debounce(handleServiceSearch, 900),
     [],
   )
+
+  const handleService = (stat, serviceId) => {
+    updateService({ status: stat, serviceId })
+  }
 
   return (
     <View style={styles.screen}>
@@ -125,7 +130,12 @@ const OwnerHome = ({ navigation }) => {
         <FlatList
           data={services}
           renderItem={({ item }) => (
-            <ServiceCard {...item} repairCard router={navigation} />
+            <ServiceCard
+              {...item}
+              repairCard
+              handleService={handleService}
+              router={navigation}
+            />
           )}
           keyExtractor={(item) => item.serviceId}
           numColumns={1}
