@@ -14,6 +14,8 @@ const styles = StyleSheet.create({
   map: {
     height: 350,
     width: 350,
+    flex: 10,
+    marginBottom: 30,
   },
   title: {
     color: '#1c1919',
@@ -21,6 +23,7 @@ const styles = StyleSheet.create({
     lineHeight: 32,
     fontWeight: 'bold',
     marginTop: 30,
+    flex: 1,
   },
 })
 

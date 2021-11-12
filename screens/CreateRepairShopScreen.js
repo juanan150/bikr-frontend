@@ -158,16 +158,13 @@ const CreateRepairShopScreen = ({ navigation, route }) => {
   }
 
   const handleCheckboxChange = (service) => {
-    console.log(form)
     const newServices = form.services ? [...form?.services] : []
-    console.log(1, newServices)
     let index = -1
     if (newServices.length > 0) {
       index = newServices.findIndex(
         (s) => s.serviceName === service.serviceName,
       )
     }
-    console.log(2, index)
     if (index === -1) {
       newServices.push({
         serviceName: service?.serviceName,
@@ -191,7 +188,6 @@ const CreateRepairShopScreen = ({ navigation, route }) => {
         },
       })
     }
-    console.log(3, newServices)
     setForm({ ...form, services: newServices })
   }
 
@@ -214,9 +210,7 @@ const CreateRepairShopScreen = ({ navigation, route }) => {
   }
 
   const populateServices = () => {
-    console.log(state.repairShop)
     if (state.repairShop?.services) {
-      console.log(state.repairShop)
       if (Object.keys(state.repairShop).length) {
         state.repairShop.services.forEach((service) => {
           state.availableServices.forEach((s) => {
