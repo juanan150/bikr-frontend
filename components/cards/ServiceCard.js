@@ -1,15 +1,28 @@
+/* eslint-disable indent */
 /* eslint-disable react/jsx-one-expression-per-line */
 import React, { useContext } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  LogBox,
+} from 'react-native'
 import { PropTypes } from 'prop-types'
 import { Feather } from '@expo/vector-icons'
 import moment from 'moment'
 import AppContext from '../../context/AppContext'
 
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+])
+
 const styles = StyleSheet.create({
   item: {
     flexDirection: 'row',
     minHeight: 170,
+    maxHeight: 200,
     width: 370,
     marginVertical: 5,
     backgroundColor: '#F7F7F8',
@@ -22,6 +35,7 @@ const styles = StyleSheet.create({
     minHeight: '100%',
     width: 150,
     borderRadius: 20,
+    resizeMode: 'contain',
   },
   infoContainer: {
     paddingLeft: 10,
@@ -29,7 +43,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   title: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   address: {
@@ -136,7 +150,16 @@ const ServiceCard = (props) => {
   return (
     <TouchableOpacity style={styles.item} onPress={goToRepairShop}>
       <View>
-        <Image source={{ uri: imageUrl }} style={styles.image} />
+        <Image
+          source={
+            imageUrl
+              ? { uri: imageUrl }
+              : {
+                  uri: 'https://res.cloudinary.com/juanan150/image/upload/v1636737711/user-dummy_bavfwk.png',
+                }
+          }
+          style={styles.image}
+        />
       </View>
       <View style={styles.infoContainer}>
         <Text style={styles.title}>{name}</Text>
@@ -193,7 +216,7 @@ ServiceCard.propTypes = {
   router: PropTypes.shape({
     navigate: PropTypes.func.isRequired,
   }).isRequired,
-  imageUrl: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string,
   name: PropTypes.string.isRequired,
   address: PropTypes.string,
   scheduleDate: PropTypes.number.isRequired,
@@ -212,6 +235,7 @@ ServiceCard.defaultProps = {
   address: '',
   repairCard: false,
   phoneNumber: '',
+  imageUrl: '',
   handleService: () => {},
 }
 

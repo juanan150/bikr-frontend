@@ -269,10 +269,17 @@ const useInitialState = () => {
     try {
       console.log('get servs')
       const response = await customAxios.get(`/api/users/${payload}/services`)
-      setState((prevState) => ({
-        ...prevState,
-        userServices: response.data,
-      }))
+      if (response.data.length > 0) {
+        setState((prevState) => ({
+          ...prevState,
+          userServices: response.data,
+        }))
+      } else {
+        setState((prevState) => ({
+          ...prevState,
+          userServices: ['No services scheduled yet'],
+        }))
+      }
     } catch (e) {
       setState({
         ...state,

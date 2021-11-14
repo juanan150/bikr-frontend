@@ -11,6 +11,7 @@ import {
   Platform,
   TextInput,
   Alert,
+  LogBox,
 } from 'react-native'
 import PropTypes from 'prop-types'
 import MapView, { Marker } from 'react-native-maps'
@@ -115,6 +116,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 })
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+])
 
 const RepairShopScreen = ({ route, navigation }) => {
   const { state, resetError, requestService } = useContext(AppContext)

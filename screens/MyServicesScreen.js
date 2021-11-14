@@ -1,5 +1,11 @@
 import React, { useContext, useEffect } from 'react'
-import { View, ActivityIndicator, StyleSheet, FlatList } from 'react-native'
+import {
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  FlatList,
+  Text,
+} from 'react-native'
 import { PropTypes } from 'prop-types'
 import { useIsFocused } from '@react-navigation/native'
 
@@ -50,16 +56,21 @@ const myServices = ({ navigation }) => {
           <ActivityIndicator size="large" color="#f2771a" />
         </View>
       ) : (
-        <FlatList
-          data={services}
-          renderItem={({ item }) => (
-            <ServiceCard {...item} router={navigation} />
-          )}
-          keyExtractor={(item) => item.serviceId}
-          numColumns={1}
-          onEndReachedThreshold={10}
-          contentContainerStyle={styles.list}
-        />
+        services[0] !== 'No services scheduled yet' && (
+          <FlatList
+            data={services}
+            renderItem={({ item }) => (
+              <ServiceCard {...item} router={navigation} />
+            )}
+            keyExtractor={(item) => item.serviceId}
+            numColumns={1}
+            onEndReachedThreshold={10}
+            contentContainerStyle={styles.list}
+          />
+        )
+      )}
+      {services[0] === 'No services scheduled yet' && (
+        <Text>{services[0]}</Text>
       )}
     </View>
   )

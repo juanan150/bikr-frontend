@@ -5,6 +5,8 @@ import PropTypes from 'prop-types'
 const styles = StyleSheet.create({
   button: {
     alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
     height: 60,
     marginTop: 10,
     padding: 10,
