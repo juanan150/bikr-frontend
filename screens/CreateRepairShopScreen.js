@@ -248,7 +248,7 @@ const CreateRepairShopScreen = ({ navigation, route }) => {
         if (create) {
           navigation.navigate('Home')
         } else {
-          Alert.alert('Repair Shop updates succesfully')
+          Alert.alert('Repair Shop updated succesfully')
         }
       }
     }
